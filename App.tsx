@@ -7,7 +7,7 @@ import Main from "./components/Main";
 export default function App() {
   return (
     <SafeAreaProvider>
-      <View className="flex-1 items-center justify-center bg-gray-100">
+      <View className="flex-1 items-center justify-center bg-black">
         <StatusBar style="dark" />
         <Main />
       </View>
