@@ -12,26 +12,26 @@ export default function About() {
           <HomeIcon />
         </StyledPressable>
       </Link>
-      <Text className="text-black font-bold text-2xl">Sobre el proyecto</Text>
-      <Text className="text-black/90 text-lg mb-4">
+      <Text className="text-white font-bold text-2xl">Sobre el proyecto</Text>
+      <Text className="text-white/90 text-lg mb-4">
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod
         consequuntur non earum commodi perferendis ex quam totam ipsam nisi,
         dolore minima vel nam autem, voluptates voluptas deleniti, nulla
         temporibus veritatis.
       </Text>
-      <Text className="text-black/90 text-lg mb-4">
+      <Text className="text-white/90 text-lg mb-4">
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod
         consequuntur non earum commodi perferendis ex quam totam ipsam nisi,
         dolore minima vel nam autem, voluptates voluptas deleniti, nulla
         temporibus veritatis.
       </Text>
-      <Text className="text-black/90 text-lg mb-4">
+      <Text className="text-white/90 text-lg mb-4">
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod
         consequuntur non earum commodi perferendis ex quam totam ipsam nisi,
         dolore minima vel nam autem, voluptates voluptas deleniti, nulla
         temporibus veritatis.
       </Text>
-      <Text className="text-black/90 text-lg mb-4">
+      <Text className="text-white/90 text-lg mb-4">
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod
         consequuntur non earum commodi perferendis ex quam totam ipsam nisi,
         dolore minima vel nam autem, voluptates voluptas deleniti, nulla
