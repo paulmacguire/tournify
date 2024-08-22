@@ -8,5 +8,5 @@
     "jsx": "react-native",
     "types": ["nativewind/types"]
   },
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": ["**/*.ts", "**/*.tsx", "app/_layout.js"]
 }
