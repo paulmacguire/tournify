@@ -1,10 +1,12 @@
 import { Game } from "../lib/types/games";
 import { useEffect, useState } from "react";
-import { FlatList, View, ScrollView, ActivityIndicator } from "react-native";
+import { Link } from "expo-router";
+import { FlatList, View, ActivityIndicator, Pressable } from "react-native";
 import { getLatestGames } from "../lib/services/mockData";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { AnimatedGameCard, GameCard } from "./GameCard";
+import { AnimatedGameCard } from "./GameCard";
 import { Logo } from "./Logo";
+import { AboutIcon } from "./Icons";
 export default function Main() {
   const [games, setGames] = useState<Game[]>([]);
   const insets = useSafeAreaInsets();
@@ -17,10 +19,7 @@ export default function Main() {
   }, []);
 
   return (
-    <View style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}>
-      <View className="mb-2 px-2">
-        <Logo />
-      </View>
+    <View className="bg-black">
       {games.length === 0 ? (
         <View className="flex">
           <ActivityIndicator />
@@ -34,17 +33,6 @@ export default function Main() {
           )}
         />
       )}
-      {/* <Pressable
-        onPress={() => alert("Abrir")}
-        className="bg-red-500 p-4 rounded-lg shadow-lg"
-        style={({ pressed }) => pressed && { backgroundColor: "#dc2626" }}
-      >
-        {({ pressed }) => (
-          <Text className={`${pressed ? "text-black" : "text-white"}`}>
-            {pressed ? "Apretado" : "Abrir"}
-          </Text>
-        )}
-      </Pressable> */}
     </View>
   );
 }
