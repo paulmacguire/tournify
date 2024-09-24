@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import styles from '../assets/Styles/Torneos';
 
 interface Torneo {
     ID_Torneo: number;
@@ -52,52 +53,46 @@ const Torneos: React.FC = () => {
         setTimeout(() => {
             setTorneos(torneosSimulados);
             setLoading(false);
-        }, 1000); // 1 segundo de delay simulado
+        }, 1000);
 
     }, []);
 
     if (loading) {
         return (
-            <View className="flex">
+            <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#0000ff" />
-                <Text>Cargando torneos...</Text>
+                <Text style={styles.loadingText}>Cargando torneos...</Text>
             </View>
         );
     }
 
     if (error) {
         return (
-            <View>
+            <View style={styles.container}>
                 <Text>{error}</Text>
             </View>
         );
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <FlatList
                 data={torneos}
                 keyExtractor={(torneo) => torneo.ID_Torneo.toString()}
                 renderItem={({ item }) => (
-                    // <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
-                    //     <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Nombre}</Text>
-                    //     <Text>Fecha: {item.Fecha}</Text>
-                    //     <Text>Ubicación: {item.Ubicación}</Text>
-                    //     <Text>Estado: {item.Estado}</Text>
-                    //     <Text>Clasificación: {item.Clasificación}</Text>
-                    // </View>
-                    <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
-                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Nombre}</Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.title}>{item.Nombre}</Text>
+                        <View style={styles.row}>
                             <Text>{item.Fecha}</Text>
                             <Text>{item.Ubicación}</Text>
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text>Estado: {item.Estado}</Text>
-                            <Text>{item.Clasificación}</Text>
+                        <View style={styles.row}>
+                            <Text>
+                                Estado: <Text style={{ color: item.Estado === 'Finalizado' ? 'red' : 'blue' }}>{item.Estado}</Text>
+                            </Text>
+                            <Text style={styles.boldText}>{item.Clasificación}</Text>
                         </View>
                     </View>
-
                 )}
             />
         </View>
