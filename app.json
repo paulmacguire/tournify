@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "ios-tournify-bundler"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,6 +27,11 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a7a81e29-ec87-466e-89b7-2ec6f8aafd1c"
+      }
+    }
   }
 }
