@@ -7,15 +7,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 // import { AnimatedGameCard } from "./GameCard";
 import Torneos from "./Torneos";
 
-
 export default function Main() {
   const [games, setGames] = useState<Game[]>([]);
   const insets = useSafeAreaInsets();
 
-
   return (
     <View>
-      <Torneos /> 
+      <Torneos />
     </View>
   );
 }
