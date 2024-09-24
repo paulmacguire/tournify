@@ -1,0 +1,58 @@
+name: CI React Native
+
+on:
+  push:
+    branches:
+      - main
+      - development
+  pull_request:
+    branches:
+      - main
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.12.0] # Usamos la versión 20.12.0 de Node.js
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install CocoaPods (for iOS)
+        if: runner.os == 'macOS'
+        run: |
+          sudo gem install cocoapods
+          cd ios && pod install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Linting
+        run: npm run lint
+
+      - name: Prettier formatting
+        run: npm run prettier-format
+
+      - name: Build Android
+        run: cd android && ./gradlew assembleDebug
+        env:
+          JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
+          ANDROID_HOME: /usr/local/lib/android/sdk
+
+      - name: Build iOS
+        if: runner.os == 'macOS'
+        run: |
+          cd ios
+          xcodebuild -workspace YourApp.xcworkspace -scheme YourApp -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=14.5' build
