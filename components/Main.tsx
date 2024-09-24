@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "expo-router";
 import { FlatList, View, ActivityIndicator, Pressable } from "react-native";
 import { getLatestGames } from "../lib/services/mockData";
+import { getTournaments } from "../lib/services/mockDataTournify";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatedGameCard } from "./GameCard";
 import { Logo } from "./Logo";
@@ -12,7 +13,7 @@ export default function Main() {
   const insets = useSafeAreaInsets();
   useEffect(() => {
     const fetchGames = async () => {
-      const latestGames = await getLatestGames();
+      const latestGames = await getTournaments();
       setGames(latestGames);
     };
     fetchGames();

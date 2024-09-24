@@ -13,6 +13,13 @@ import { styled } from "nativewind";
 
 const StyledPressable = styled(Pressable);
 
+const imageMap = {
+  "torneo-verano-2024": require("../assets/liga_cai.png"),
+  "torneo-invierno-2024": require("../assets/ultrapadel.jpg"),
+  "torneo-primavera-2024": require("../assets/liga_premier.png"),
+  "torneo-otono-2024": require("../assets/lif.png")
+};
+
 interface GameCardProps {
   game: Game;
 }
@@ -23,16 +30,17 @@ interface AnimatedGameCardProps {
 }
 
 export const GameCard: React.FC<GameCardProps> = ({ game }) => {
+  const img = imageMap[game.slug];
   return (
     <Link asChild href={`/${game.slug}`}>
       <StyledPressable className="active-opacity-70 border border-black active:border-white/50 mb-2 bg-gray-500/10 rounded-xl p-4">
         <View className="flex-row p-4 gap-4" key={game.slug}>
-          <Image source={{ uri: game.image }} style={styles.image} />
+          <Image source={img} style={styles.image} resizeMode="contain"/>
           <View className="flex-shrink">
-            <Text className="mb-1" style={styles.title}>
-              {game.title}
+            <Text className="mb-1" style={styles.nombre}>
+              {game.nombre}
             </Text>
-            <Text style={styles.score}>{game.score}</Text>
+            <Text style={styles.estado}>{game.estado}</Text>
             <Text className="mt-2 flex-shrink" style={styles.description}>
               {game.description.slice(0, 100)}...
             </Text>
@@ -73,8 +81,9 @@ const styles = StyleSheet.create({
     width: 107,
     height: 147,
     borderRadius: 10,
+
   },
-  title: {
+  nombre: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#fff",
@@ -84,7 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "white",
   },
-  score: {
+  estado: {
     fontSize: 20,
     fontWeight: "bold",
     color: "green",
