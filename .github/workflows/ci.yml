@@ -31,7 +31,7 @@ jobs:
         run: npm install
 
       - name: Install Expo CLI
-        run: npx expo install expo-cli
+        run: npx expo install
 
       - name: Prettier formatting
         run: npm run prettier-format
