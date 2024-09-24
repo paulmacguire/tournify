@@ -40,4 +40,4 @@ jobs:
         run: npm run lint
 
       - name: Start Expo for validation
-        run: npx expo start --offline
+        run: npm run start
