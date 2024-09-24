@@ -9,7 +9,10 @@ import Torneos from "./Torneos";
 
 export default function Main() {
   const [games, setGames] = useState<Game[]>([]);
-  const insets = useSafeAreaInsets();
+  const insets = 
+  
+  
+  useSafeAreaInsets();
 
   return (
     <View>
