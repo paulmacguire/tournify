@@ -14,28 +14,9 @@ export default function About() {
       </Link>
       <Text className="text-white font-bold text-2xl">Sobre el proyecto</Text>
       <Text className="text-white/90 text-lg mb-4">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod
-        consequuntur non earum commodi perferendis ex quam totam ipsam nisi,
-        dolore minima vel nam autem, voluptates voluptas deleniti, nulla
-        temporibus veritatis.
-      </Text>
-      <Text className="text-white/90 text-lg mb-4">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod
-        consequuntur non earum commodi perferendis ex quam totam ipsam nisi,
-        dolore minima vel nam autem, voluptates voluptas deleniti, nulla
-        temporibus veritatis.
-      </Text>
-      <Text className="text-white/90 text-lg mb-4">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod
-        consequuntur non earum commodi perferendis ex quam totam ipsam nisi,
-        dolore minima vel nam autem, voluptates voluptas deleniti, nulla
-        temporibus veritatis.
-      </Text>
-      <Text className="text-white/90 text-lg mb-4">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod
-        consequuntur non earum commodi perferendis ex quam totam ipsam nisi,
-        dolore minima vel nam autem, voluptates voluptas deleniti, nulla
-        temporibus veritatis.
+        Esta es una aplicación de torneos de futbol, donde puedes ver los
+        torneos más recientes y próximos a jugarse. Aquí puedes ver los torneos,
+        los equipos que participan, los partidos y las posiciones actuales.
       </Text>
     </ScrollView>
   );
