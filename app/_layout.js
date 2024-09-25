@@ -1,4 +1,4 @@
-import { View, Pressable } from "react-native";
+import { View, Pressable, Text } from "react-native";
 import { Stack } from "expo-router";
 import { Link } from "expo-router";
 import { AboutIcon } from "@/components/Icons";
@@ -13,11 +13,13 @@ export default function Layout() {
           headerTitle: "",
           headerLeft: () => <Logo />,
           headerRight: () => (
-            <Link asChild href={"/about"}>
-              <Pressable>
-                <AboutIcon />
-              </Pressable>
-            </Link>
+            <>
+              <Link asChild href={"/about"}>
+                <Pressable>
+                  <AboutIcon />
+                </Pressable>
+              </Link>
+            </>
           ),
         }}
       />
