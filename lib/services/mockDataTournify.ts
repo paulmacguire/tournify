@@ -1,3 +1,5 @@
+// mockDataTournify.ts
+
 export async function getTournaments() {
   const tournaments = [
     {
@@ -6,21 +8,23 @@ export async function getTournaments() {
       ubicacion: "Santiago, Chile",
       estado: "Disponible",
       rol: "Participante",
-      clasificacion: "Primera División",
-      description: "Torneo de Verano 2024",
+      clasificacion: "Universitario",
+      description: "Torneo Universitario Ingeniería UC",
       slug: "torneo-verano-2024",
       image: "../assets/liga_cai.png",
+      organizador: "Diego Astudillo",
     },
     {
-      nombre: "UltraPadel",
+      nombre: "UltraFutbol",
       fecha: "2024-12-01",
       ubicacion: "Santiago, Chile",
       estado: "Disponible",
       rol: "Participante",
-      clasificacion: "Segunda División",
-      description: "Torneo de Invierno 2024",
+      clasificacion: "Amateur",
+      description: "Torneo corporativo CCU",
       slug: "torneo-invierno-2024",
       image: "../assets/ultrapadel.jpg",
+      organizador: "Francisco Campos",
     },
     {
       nombre: "Liga Premier",
@@ -28,10 +32,11 @@ export async function getTournaments() {
       ubicacion: "Santiago, Chile",
       estado: "En Proceso",
       rol: "Participante",
-      clasificacion: "Tercera División",
-      description: "Torneo de Primavera 2024",
+      clasificacion: "Amateur",
+      description: "Liga Amateur de futbol",
       slug: "torneo-primavera-2024",
       image: "../assets/liga_premier.png",
+      organizador: "Paul MacGuire",
     },
     {
       nombre: "Liga Independiente de Futbol",
@@ -39,40 +44,13 @@ export async function getTournaments() {
       ubicacion: "Santiago, Chile",
       estado: "En Proceso",
       rol: "Participante",
-      clasificacion: "Segunda División",
-      description: "Torneo de Primavera 2024",
+      clasificacion: "Amateur",
+      description: "Liga Independiente de futbol",
       slug: "torneo-otono-2024",
       image: "../assets/lif.png",
+      organizador: "Michele Grimaldos",
     },
   ];
 
-  return tournaments.map((item: any) => {
-    const {
-      nombre,
-      fecha,
-      ubicación,
-      estado,
-      rol,
-      clasificación,
-      description,
-      slug,
-      image,
-      score,
-      title,
-    } = item;
-
-    return {
-      nombre,
-      fecha,
-      ubicación,
-      estado,
-      rol,
-      clasificación,
-      description,
-      slug,
-      image,
-      score,
-      title,
-    };
-  });
+  return tournaments;
 }
