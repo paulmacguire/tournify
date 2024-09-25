@@ -26,13 +26,15 @@ export default function Main() {
           <ActivityIndicator />
         </View>
       ) : (
-        <FlatList
-          data={games}
-          keyExtractor={(game) => game.slug}
-          renderItem={({ item, index }) => (
-            <AnimatedGameCard game={item} index={index} />
-          )}
-        />
+        <>
+          <FlatList
+            data={games}
+            keyExtractor={(game) => game.slug}
+            renderItem={({ item, index }) => (
+              <AnimatedGameCard game={item} index={index} />
+            )}
+          />
+        </>
       )}
     </View>
   );
