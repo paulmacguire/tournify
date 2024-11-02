@@ -4,66 +4,71 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Platform,
   KeyboardAvoidingView,
-  Pressable,
+  Switch,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import ModalDateTimePicker from "react-native-modal-datetime-picker";
+import { TextInput } from "react-native";
 import { useRouter } from "expo-router";
-
-const CreateTournament: React.FC = () => {
-  const [tournamentName, setTournamentName] = useState("");
+import { login, register } from "@/lib/services/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+const AuthView: React.FC = () => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [location, setLocation] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isRegister, setIsRegister] = useState(false);
   const [classification, setClassification] = useState("");
 
   const router = useRouter();
 
-  // Funciones para manejar la visibilidad del selector de fecha
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
+  const handleAuth = async () => {
+    try {
+      let response;
+      if (isRegister) {
+        response = await register({
+          email: email,
+          password,
+          role: classification,
+        });
+      } else {
+        response = await login({
+          email: email,
+          password,
+        });
+      }
 
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
+      if (response) {
+        AsyncStorage.setItem("access_token", response.access_token);
+      } else {
+        throw new Error("No se pudo autenticar");
+      }
 
-  // Función para manejar la selección de fecha
-  const handleConfirm = (selectedDate: Date) => {
-    setDate(selectedDate);
-    hideDatePicker();
-  };
-
-  // Función para manejar la creación del torneo
-  const handleCreateTournament = () => {
-    console.log({
-      tournamentName,
-      location,
-      date: date.toISOString().split("T")[0],
-      classification,
-    });
-
-    // Redirigir a la página de home después de la creación del torneo
-    router.push("/home");
+      router.push("/home");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.formContainer}>
-        <Text style={styles.title}>Crear Torneo</Text>
+        <Text style={styles.title}>¡Bienvenido!</Text>
+
+        <View style={styles.toggleContainer}>
+          <Text style={styles.toggleLabel}>Iniciar Sesión</Text>
+          <Switch value={isRegister} onValueChange={setIsRegister} />
+          <Text style={styles.toggleLabel}>Registrarse</Text>
+        </View>
 
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Usuario</Text>
           <TextInput
             style={styles.input}
-            placeholder="juan.perez34"
-            value={tournamentName}
-            onChangeText={setTournamentName}
+            placeholder="juan.perez34@gmail.com"
+            value={email}
+            onChangeText={setEmail}
           />
         </View>
+
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Contraseña</Text>
           <TextInput
@@ -75,45 +80,41 @@ const CreateTournament: React.FC = () => {
           />
         </View>
 
-        {/* Dropdown para clasificación */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Tipo de persona</Text>
-          <RNPickerSelect
-            onValueChange={(value) => setClassification(value)}
-            items={[
-              { label: "Organizador", value: "Organizador" },
-              { label: "Jugador", value: "Jugador" },
-            ]}
-            style={{
-              inputIOS: styles.input,
-              inputAndroid: styles.input,
-              placeholder: { color: "#9ca3af" },
-            }}
-            placeholder={{ label: "Selecciona una clasificación", value: "" }}
-            value={classification}
-          />
-        </View>
+        {/* Campos adicionales para registro */}
+        {isRegister && (
+          <>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Tipo de persona</Text>
+              <RNPickerSelect
+                onValueChange={(value) => setClassification(value)}
+                items={[
+                  { label: "Organizador", value: "Organizador" },
+                  { label: "Jugador", value: "Jugador" },
+                ]}
+                style={{
+                  inputIOS: styles.input,
+                  inputAndroid: styles.input,
+                  placeholder: { color: "#9ca3af" },
+                }}
+                placeholder={{
+                  label: "Selecciona una clasificación",
+                  value: "",
+                }}
+                value={classification}
+              />
+            </View>
+          </>
+        )}
 
-        <TouchableOpacity
-          onPress={handleCreateTournament}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Iniciar Sesión</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={handleCreateTournament}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Registrarse</Text>
+        <TouchableOpacity onPress={handleAuth} style={styles.button}>
+          <Text style={styles.buttonText}>
+            {isRegister ? "Registrarse" : "Iniciar Sesión"}
+          </Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
 };
-
-import { TextInput } from "react-native";
-import { Link } from "expo-router";
 
 const styles = StyleSheet.create({
   container: {
@@ -138,6 +139,17 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 24,
   },
+  toggleContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  toggleLabel: {
+    fontSize: 16,
+    color: "white",
+    marginHorizontal: 8,
+  },
   inputContainer: {
     marginBottom: 16,
   },
@@ -157,10 +169,6 @@ const styles = StyleSheet.create({
     color: "#1f2937",
     justifyContent: "center",
   },
-  dateText: {
-    color: "#1f2937",
-    fontSize: 16,
-  },
   button: {
     backgroundColor: "#1d4ed8",
     padding: 16,
@@ -179,4 +187,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateTournament;
+export default AuthView;

@@ -6,7 +6,7 @@
       "@/*": ["./*"]
     },
     "jsx": "react-native",
-    "types": ["nativewind/types"]
+    "types": ["nativewind/types", "node"]
   },
   "include": ["**/*.ts", "**/*.tsx", "app/_layout.js"]
 }
