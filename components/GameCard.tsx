@@ -17,7 +17,7 @@ const imageMap = {
   "torneo-verano-2024": require("../assets/liga_cai.png"),
   "torneo-invierno-2024": require("../assets/ultrapadel.jpg"),
   "torneo-primavera-2024": require("../assets/liga_premier.png"),
-  "torneo-otono-2024": require("../assets/lif.png")
+  "torneo-otono-2024": require("../assets/lif.png"),
 };
 
 interface GameCardProps {
@@ -35,7 +35,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
     <Link asChild href={`/${game.slug}`}>
       <StyledPressable className="active-opacity-70 border border-black active:border-white/50 mb-2 bg-gray-500/10 rounded-xl p-4">
         <View className="flex-row p-4 gap-4" key={game.slug}>
-          <Image source={img} style={styles.image} resizeMode="contain"/>
+          <Image source={img} style={styles.image} resizeMode="contain" />
           <View className="flex-shrink">
             <Text className="mb-1" style={styles.nombre}>
               {game.nombre}
@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     width: 107,
     height: 147,
     borderRadius: 10,
-
   },
   nombre: {
     fontSize: 20,

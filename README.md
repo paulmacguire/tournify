@@ -1,3 +1,4 @@
 Para correr el proyecto:
-- ``` npm i ```
-- ``` npm run start ```
+
+- `npm i`
+- `npm run start`

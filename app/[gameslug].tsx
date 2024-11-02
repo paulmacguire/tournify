@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "expo-router";
-import {
-  Text,
-  View,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { getTournaments } from "../lib/services/mockDataTournify";
 import { SoccerBall } from "phosphor-react-native";
@@ -26,7 +21,7 @@ interface Tournament {
 export default function Detail() {
   const { gameslug } = useLocalSearchParams();
   const [tournament, setTournament] = useState<Tournament | undefined>(
-    undefined
+    undefined,
   );
 
   useEffect(() => {

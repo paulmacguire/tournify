@@ -33,6 +33,5 @@ jobs:
       - name: 🧹 Linting
         run: npm run lint
 
-
       # - name: 🚀 Build app
       #   run: eas build --non-interactive --platform all
