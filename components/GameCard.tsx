@@ -1,4 +1,6 @@
-import { Game } from "@/lib/types/games";
+// components/GameCard.tsx
+
+import { Tournament } from "../lib/services/mockDataTournify";
 import { Link } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import {
@@ -9,44 +11,26 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import { styled } from "nativewind";
-
-const StyledPressable = styled(Pressable);
-
-const imageMap = {
-  "torneo-verano-2024": require("../assets/liga_cai.png"),
-  "torneo-invierno-2024": require("../assets/ultrapadel.jpg"),
-  "torneo-primavera-2024": require("../assets/liga_premier.png"),
-  "torneo-otono-2024": require("../assets/lif.png")
-};
 
 interface GameCardProps {
-  game: Game;
+  game: Tournament;
 }
 
 interface AnimatedGameCardProps {
-  game: Game;
+  game: Tournament;
   index: number;
 }
 
 export const GameCard: React.FC<GameCardProps> = ({ game }) => {
-  const img = imageMap[game.slug];
   return (
-    <Link asChild href={`/${game.slug}`}>
-      <StyledPressable className="active-opacity-70 border border-black active:border-white/50 mb-2 bg-gray-500/10 rounded-xl p-4">
-        <View className="flex-row p-4 gap-4" key={game.slug}>
-          <Image source={img} style={styles.image} resizeMode="contain"/>
-          <View className="flex-shrink">
-            <Text className="mb-1" style={styles.nombre}>
-              {game.nombre}
-            </Text>
-            <Text style={styles.estado}>{game.estado}</Text>
-            <Text className="mt-2 flex-shrink" style={styles.description}>
-              {game.description.slice(0, 100)}...
-            </Text>
-          </View>
+    <Link href={`/${game.slug}`} asChild>
+      <Pressable style={styles.card}>
+        <Image source={game.image} style={styles.image} resizeMode="cover" />
+        <View style={styles.infoContainer}>
+          <Text style={styles.title}>{game.nombre}</Text>
+          <Text style={styles.description}>{game.description}</Text>
         </View>
-      </StyledPressable>
+      </Pressable>
     </Link>
   );
 };
@@ -61,7 +45,7 @@ export const AnimatedGameCard: React.FC<AnimatedGameCardProps> = ({
     Animated.timing(opacity, {
       toValue: 1,
       duration: 500,
-      delay: 500 * index,
+      delay: 200 * index,
       useNativeDriver: true,
     }).start();
   }, [opacity, index]);
@@ -75,28 +59,26 @@ export const AnimatedGameCard: React.FC<AnimatedGameCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 42,
+    backgroundColor: '#2C2C2E',
+    borderRadius: 12,
+    marginBottom: 16,
+    overflow: 'hidden',
   },
   image: {
-    width: 107,
-    height: 147,
-    borderRadius: 10,
-
+    width: '100%',
+    height: 180,
   },
-  nombre: {
+  infoContainer: {
+    padding: 16,
+  },
+  title: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff",
-    marginTop: 10,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 8,
   },
   description: {
-    fontSize: 16,
-    color: "white",
-  },
-  estado: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "green",
-    marginBottom: 10,
+    fontSize: 14,
+    color: '#B0B0B0',
   },
 });

@@ -1,41 +1,59 @@
-import { Game } from "../lib/types/games";
-import { useEffect, useState } from "react";
-import { Link } from "expo-router";
-import { FlatList, View, ActivityIndicator, Pressable } from "react-native";
-import { getLatestGames } from "../lib/services/mockData";
-import { getTournaments } from "../lib/services/mockDataTournify";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { AnimatedGameCard } from "./GameCard";
-import { Logo } from "./Logo";
-import { AboutIcon } from "./Icons";
+// app/Main.tsx
+
+import React, { useEffect, useState } from 'react';
+import {
+  FlatList,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+} from 'react-native';
+import { getTournaments, Tournament } from '../lib/services/mockDataTournify';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { AnimatedGameCard } from '../components/GameCard';
+
 export default function Main() {
-  const [games, setGames] = useState<Game[]>([]);
+  const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const insets = useSafeAreaInsets();
+
   useEffect(() => {
-    const fetchGames = async () => {
-      const latestGames = await getTournaments();
-      setGames(latestGames);
+    const fetchTournaments = async () => {
+      const data = await getTournaments();
+      setTournaments(data);
     };
-    fetchGames();
+    fetchTournaments();
   }, []);
 
   return (
-    <View className="bg-black">
-      {games.length === 0 ? (
-        <View className="flex">
-          <ActivityIndicator />
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      {tournaments.length === 0 ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator color="#ffffff" />
         </View>
       ) : (
-        <>
-          <FlatList
-            data={games}
-            keyExtractor={(game) => game.slug}
-            renderItem={({ item, index }) => (
-              <AnimatedGameCard game={item} index={index} />
-            )}
-          />
-        </>
+        <FlatList
+          data={tournaments}
+          keyExtractor={(item) => item.slug}
+          renderItem={({ item, index }) => (
+            <AnimatedGameCard game={item} index={index} />
+          )}
+          contentContainerStyle={styles.listContent}
+        />
       )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#1A1A1D',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  listContent: {
+    padding: 16,
+  },
+});
