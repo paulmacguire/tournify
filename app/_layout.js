@@ -1,7 +1,7 @@
 import { View, Pressable, Text } from "react-native";
 import { Stack } from "expo-router";
 import { Link } from "expo-router";
-import { AboutIcon } from "@/components/Icons";
+import { AboutIcon, UserIcon } from "@/components/Icons";
 import { Logo } from "@/components/Logo";
 export default function Layout() {
   return (
@@ -14,11 +14,21 @@ export default function Layout() {
           headerLeft: () => <Logo />,
           headerRight: () => (
             <>
-              <Link asChild href={"/about"}>
-                <Pressable>
-                  <AboutIcon />
-                </Pressable>
-              </Link>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                
+                <Link asChild href={"/profile"}>
+                  <Pressable style={{ marginRight: 10 }}>
+                    <UserIcon />
+                  </Pressable>
+                </Link>
+                
+                <Link asChild href={"/about"}>
+                  <Pressable>
+                    <AboutIcon />
+                  </Pressable>
+                </Link>
+                
+              </View>
             </>
           ),
         }}

@@ -53,7 +53,7 @@ export default function Detail() {
     <ScrollView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <SoccerBall size={40} color="#ffffff" weight="fill" />
+          {/* <SoccerBall size={40} color="#ffffff" weight="fill" /> */}
           <Text style={styles.title}>{tournament.nombre}</Text>
         </View>
         <View style={styles.detailsContainer}>
