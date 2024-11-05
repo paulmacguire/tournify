@@ -1,4 +1,3 @@
-
 import { Tournament } from "../lib/services/mockDataTournify";
 import { Link } from "expo-router";
 import React, { useEffect, useRef } from "react";
@@ -10,6 +9,13 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
+
+const imageMap = {
+  "torneo-verano-2024": require("../assets/liga_cai.png"),
+  "torneo-invierno-2024": require("../assets/ultrapadel.jpg"),
+  "torneo-primavera-2024": require("../assets/liga_premier.png"),
+  "torneo-otono-2024": require("../assets/lif.png"),
+};
 
 interface GameCardProps {
   game: Tournament;
@@ -58,26 +64,25 @@ export const AnimatedGameCard: React.FC<AnimatedGameCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#2C2C2E',
+    backgroundColor: "#2C2C2E",
     borderRadius: 12,
     marginBottom: 16,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 180,
   },
   infoContainer: {
     padding: 16,
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    fontWeight: "bold",
+    color: "#FFFFFF",
     marginBottom: 8,
   },
   description: {
     fontSize: 14,
-    color: '#B0B0B0',
+    color: "#B0B0B0",
   },
 });
