@@ -1,4 +1,3 @@
-// components/GameCard.tsx
 
 import { Tournament } from "../lib/services/mockDataTournify";
 import { Link } from "expo-router";
@@ -27,7 +26,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
       <Pressable style={styles.card}>
         <Image source={game.image} style={styles.image} resizeMode="cover" />
         <View style={styles.infoContainer}>
-          <Text style={styles.title}>{game.nombre}</Text>
+          <Text style={styles.title}>{game.name}</Text>
           <Text style={styles.description}>{game.description}</Text>
         </View>
       </Pressable>

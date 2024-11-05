@@ -1,4 +1,3 @@
-// app/admin/Home.tsx
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable, Image } from 'react-native';
@@ -41,8 +40,8 @@ export default function AdminHome() {
           <Pressable style={styles.card} onPress={() => handleSelectTournament(item.slug)}>
             <Image source={item.image} style={styles.image} />
             <View style={styles.textContainer}>
-              <Text style={styles.tournamentName}>{item.nombre}</Text>
-              <Text style={styles.tournamentDate}>{item.fecha}</Text>
+              <Text style={styles.tournamentName}>{item.name}</Text>
+              <Text style={styles.tournamentDate}>{item.date}</Text>
             </View>
           </Pressable>
         )}

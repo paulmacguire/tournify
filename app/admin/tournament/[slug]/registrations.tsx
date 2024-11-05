@@ -1,4 +1,3 @@
-// app/admin/tournament/[slug]/registrations.tsx
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
@@ -24,7 +23,7 @@ export default function AdminRegistrations() {
       // Obtener los equipos correspondientes
       const teamsData: Record<string, Team> = {};
       for (const reg of regs) {
-        const team = await getTeamById(reg.equipoId);
+        const team = await getTeamById(reg.teamId);
         if (team) {
           teamsData[team.id] = team;
         }
@@ -47,9 +46,9 @@ export default function AdminRegistrations() {
       <Text style={styles.title}>Gestionar Inscripciones</Text>
       {registrations.map((reg) => (
         <View key={reg.id} style={styles.card}>
-          <Text style={styles.teamName}>{teams[reg.equipoId]?.nombre}</Text>
-          <Text style={styles.status}>Estado: {reg.estado}</Text>
-          {reg.estado === 'Pendiente' && (
+          <Text style={styles.teamName}>{teams[reg.teamId]?.name}</Text>
+          <Text style={styles.status}>Estado: {reg.status}</Text>
+          {reg.status === 'Pendiente' && (
             <View style={styles.buttonContainer}>
               <Pressable
                 style={[styles.button, styles.acceptButton]}

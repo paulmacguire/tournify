@@ -1,4 +1,3 @@
-// components/StandingsTable.tsx
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
@@ -24,15 +23,15 @@ const StandingsTable: React.FC<StandingsTableProps> = ({ standings }) => {
       </View>
       {standings.map((team) => (
         <View style={styles.row} key={team.id}>
-          <Text style={[styles.cell, { flex: 3 }]} numberOfLines={1} ellipsizeMode="tail">{team.nombre}</Text>
-          <Text style={styles.cell}>{team.puntos}</Text>
-          <Text style={styles.cell}>{team.partidosJugados}</Text>
-          <Text style={styles.cell}>{team.partidosGanados}</Text>
-          <Text style={styles.cell}>{team.partidosEmpatados}</Text>
-          <Text style={styles.cell}>{team.partidosPerdidos}</Text>
-          <Text style={styles.cell}>{team.golesFavor}</Text>
-          <Text style={styles.cell}>{team.golesContra}</Text>
-          <Text style={styles.cell}>{team.diferenciaGoles}</Text>
+          <Text style={[styles.cell, { flex: 3 }]} numberOfLines={1} ellipsizeMode="tail">{team.name}</Text>
+          <Text style={styles.cell}>{team.points}</Text>
+          <Text style={styles.cell}>{team.matchesPlayed}</Text>
+          <Text style={styles.cell}>{team.matchesWon}</Text>
+          <Text style={styles.cell}>{team.matchesDrawn}</Text>
+          <Text style={styles.cell}>{team.matchesLost}</Text>
+          <Text style={styles.cell}>{team.goalsFor}</Text>
+          <Text style={styles.cell}>{team.goalsAgainst}</Text>
+          <Text style={styles.cell}>{team.goalDifference}</Text>
         </View>
       ))}
     </View>

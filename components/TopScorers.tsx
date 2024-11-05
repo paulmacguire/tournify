@@ -1,4 +1,3 @@
-// components/TopScorers.tsx
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
@@ -15,10 +14,10 @@ const TopScorers: React.FC<TopScorersProps> = ({ topScorers }) => {
         <View style={styles.row} key={player.id}>
           <Text style={styles.position}>{index + 1}</Text>
           <View style={styles.playerInfo}>
-            <Text style={styles.name}>{player.nombre}</Text>
-            <Text style={styles.team}>{player.equipoNombre}</Text>
+            <Text style={styles.name}>{player.name}</Text>
+            <Text style={styles.team}>{player.teamName}</Text>
           </View>
-          <Text style={styles.goals}>{player.goles} goles</Text>
+          <Text style={styles.goals}>{player.goals} goles</Text>
         </View>
       ))}
     </View>

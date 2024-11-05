@@ -62,8 +62,8 @@ export default function Detail() {
   }
 
   // Separar partidos pendientes y finalizados
-  const pendingMatches = matches.filter(match => match.estado === 'Pendiente');
-  const finishedMatches = matches.filter(match => match.estado === 'Finalizado');
+  const pendingMatches = matches.filter(match => match.status === 'Pendiente');
+  const finishedMatches = matches.filter(match => match.status === 'Finalizado');
 
   return (
     <ScrollView style={styles.container}>
@@ -71,24 +71,24 @@ export default function Detail() {
         {/* Información del torneo */}
         <View style={styles.header}>
           <SoccerBall size={40} color="#ffffff" weight="fill" />
-          <Text style={styles.title}>{tournament.nombre}</Text>
+          <Text style={styles.title}>{tournament.name}</Text>
         </View>
         <View style={styles.detailsContainer}>
           <View style={styles.detailRow}>
             <Text style={styles.label}>Ubicación:</Text>
-            <Text style={styles.detailText}>{tournament.ubicacion}</Text>
+            <Text style={styles.detailText}>{tournament.location}</Text>
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.label}>Fecha:</Text>
-            <Text style={styles.detailText}>{tournament.fecha}</Text>
+            <Text style={styles.detailText}>{tournament.date}</Text>
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.label}>Clasificación:</Text>
-            <Text style={styles.detailText}>{tournament.clasificacion}</Text>
+            <Text style={styles.detailText}>{tournament.classification}</Text>
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.label}>Organizador:</Text>
-            <Text style={styles.detailText}>{tournament.organizador}</Text>
+            <Text style={styles.detailText}>{tournament.organizer}</Text>
           </View>
         </View>
 

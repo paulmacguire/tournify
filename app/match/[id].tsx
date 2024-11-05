@@ -1,4 +1,3 @@
-// app/match/[id].tsx
 
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
@@ -26,18 +25,18 @@ export default function MatchDetails() {
     );
   }
 
-  const isPending = match.estado === 'Pendiente';
+  const isPending = match.status === 'Pendiente';
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <SoccerBall size={40} color="#ffffff" weight="fill" />
-        <Text style={styles.title}>{match.equipo1} vs {match.equipo2}</Text>
+        <Text style={styles.title}>{match.team1} vs {match.team2}</Text>
       </View>
-      <Text style={styles.detailText}>Fecha: {match.fecha}</Text>
-      <Text style={styles.detailText}>Hora: {match.hora}</Text>
+      <Text style={styles.detailText}>Fecha: {match.date}</Text>
+      <Text style={styles.detailText}>Hora: {match.time}</Text>
       <Text style={styles.detailText}>
-        Resultado: {isPending ? 'Por jugar' : match.resultado}
+        Resultado: {isPending ? 'Por jugar' : match.result || 'No definido'}
       </Text>
 
       {isPending ? (
@@ -45,8 +44,8 @@ export default function MatchDetails() {
       ) : (
         <>
           <Text style={styles.sectionTitle}>Eventos del Partido</Text>
-          {match.eventos && match.eventos.length > 0 ? (
-            match.eventos.map((event, index) => (
+          {match.events && match.events.length > 0 ? (
+            match.events.map((event, index) => (
               <EventItem key={index} event={event} />
             ))
           ) : (
@@ -55,7 +54,7 @@ export default function MatchDetails() {
         </>
       )}
 
-      <Link style={styles.backLink} href={`/${match.torneoSlug}`}>
+      <Link style={styles.backLink} href={`/${match.tournamentSlug}`}>
         Volver al torneo
       </Link>
     </View>
@@ -66,14 +65,14 @@ const EventItem: React.FC<{ event: MatchEvent }> = ({ event }) => {
   return (
     <View style={styles.eventItem}>
       <Text style={styles.eventText}>
-        {event.minuto}' - {event.tipo} de {event.jugador} ({event.equipo})
+        {event.minute}' - {event.type} de {event.player} ({event.team})
       </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  // ... estilos existentes
+  // Estilos existentes
   container: {
     flex: 1,
     backgroundColor: "#1A1A1D",

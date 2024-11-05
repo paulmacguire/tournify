@@ -1,4 +1,3 @@
-// app/admin/tournament/[slug]/index.tsx
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
@@ -37,7 +36,7 @@ export default function AdminTournamentPanel() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Panel de Administración</Text>
-      <Text style={styles.tournamentName}>{tournament.nombre}</Text>
+      <Text style={styles.tournamentName}>{tournament.name}</Text>
 
       <Link href={`/admin/tournament/${slug}/registrations`} asChild>
         <Pressable style={styles.button}>

@@ -1,4 +1,3 @@
-// components/MatchCard.tsx
 
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
@@ -11,25 +10,25 @@ interface MatchCardProps {
 }
 
 const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
-  const isPending = match.estado === 'Pendiente';
+  const isPending = match.status === 'Pendiente';
 
   return (
     <Link href={`/match/${match.id}`} asChild>
       <Pressable style={styles.card}>
         <View style={styles.header}>
-          <Text style={styles.date}>{match.fecha} - {match.hora}</Text>
+          <Text style={styles.date}>{match.date} - {match.time}</Text>
         </View>
         <View style={styles.body}>
           <View style={styles.teamContainer}>
             <SoccerBall size={24} color="#FFFFFF" weight="fill" />
-            <Text style={styles.teamName} numberOfLines={1} ellipsizeMode="tail">{match.equipo1}</Text>
+            <Text style={styles.teamName} numberOfLines={1} ellipsizeMode="tail">{match.team1}</Text>
           </View>
           <Text style={styles.score}>
-            {isPending ? 'VS' : match.resultado}
+            {isPending ? 'VS' : match.result}
           </Text>
           <View style={styles.teamContainer}>
             <SoccerBall size={24} color="#FFFFFF" weight="fill" />
-            <Text style={styles.teamName} numberOfLines={1} ellipsizeMode="tail">{match.equipo2}</Text>
+            <Text style={styles.teamName} numberOfLines={1} ellipsizeMode="tail">{match.team2}</Text>
           </View>
         </View>
         {isPending && (

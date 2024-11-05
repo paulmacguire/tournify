@@ -1,251 +1,258 @@
-// lib/services/mockDataTournify.ts
 
 export interface Tournament {
-  nombre: string;
-  fecha: string;
-  ubicacion: string;
-  estado: string;
+  name: string;
+  date: string;
+  location: string;
+  state: string;
   rol: string;
-  clasificacion: string;
+  classification: string;
   description: string;
   slug: string;
-  image: any; // Acepta 'require' de imágenes
-  organizador: string;
+  image: any; 
+  organizer: string;
 }
 
 export interface Team {
   id: string;
-  nombre: string;
-  capitanId: string;
-  jugadores: string[]; 
+  name: string;
+  captainId: string;
+  players: string[];
 
-  puntos: number;
-  partidosJugados: number;
-  partidosGanados: number;
-  partidosEmpatados: number;
-  partidosPerdidos: number;
-  golesFavor: number;
-  golesContra: number;
-  diferenciaGoles: number;
-  torneoSlug: string;
+  points: number;
+  matchesPlayed: number;
+  matchesWon: number;
+  matchesDrawn: number;
+  matchesLost: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  goalDifference: number;
+  tournamentSlug: string;
 }
-
 
 export interface TeamRegistration {
   id: string;
-  equipoId: string;
-  torneoSlug: string;
-  estado: 'Pendiente' | 'Aceptado' | 'Rechazado';
+  teamId: string;
+  tournamentSlug: string;
+  status: 'Pendiente' | 'Aceptado' | 'Rechazado';
 }
 
 export interface Player {
   id: string;
-  nombre: string;
-  equipoId: string;
-  equipoNombre: string;
-  goles: number;
-  torneoSlug: string;
+  name: string;
+  teamId: string;
+  teamName: string;
+  goals: number;
+  tournamentSlug: string;
 }
 
 export interface MatchEvent {
-  minuto: number;
-  tipo: 'Gol' | 'Tarjeta Amarilla' | 'Tarjeta Roja' | 'Sustitución';
-  jugador: string;
-  equipo: string;
-  detalle?: string;
+  minute: number;
+  type: 'Gol' | 'Tarjeta Amarilla' | 'Tarjeta Roja' | 'Sustitución';
+  player: string;
+  team: string;
+  detail?: string;
 }
 
 export interface Match {
   id: string;
-  fecha: string;
-  hora: string;
-  equipo1: string;
-  equipo2: string;
-  resultado: string;
-  torneoSlug: string;
-  estado: 'Pendiente' | 'Finalizado';
-  eventos?: MatchEvent[];
+  date: string;
+  time: string;
+  team1: string;
+  team2: string;
+  result: string;
+  tournamentSlug: string;
+  status: 'Pendiente' | 'Finalizado';
+  events?: MatchEvent[];
 }
 
 export interface User {
   id: string;
-  nombre: string;
+  name: string;
   rol: 'Usuario' | 'Capitan' | 'Admin';
 }
 
-// Datos simulados
 let tournaments: Tournament[] = [
   {
-    nombre: "Liga CAI UC",
-    fecha: "2024-06-15",
-    ubicacion: "Santiago, Chile",
-    estado: "Disponible",
+    name: "Liga CAI UC",
+    date: "2024-06-15",
+    location: "Santiago, Chile",
+    state: "Disponible",
     rol: "Participante",
-    clasificacion: "Universitario",
+    classification: "Universitario",
     description: "Torneo Universitario Ingeniería UC",
     slug: "liga-cai-uc",
     image: require("../../assets/liga_cai.png"),
-    organizador: "Diego Astudillo",
+    organizer: "Diego Astudillo",
   },
   {
-    nombre: "UltraFutbol",
-    fecha: "2024-12-01",
-    ubicacion: "Santiago, Chile",
-    estado: "Disponible",
+    name: "UltraFutbol",
+    date: "2024-12-01",
+    location: "Santiago, Chile",
+    state: "Disponible",
     rol: "Participante",
-    clasificacion: "Amateur",
+    classification: "Amateur",
     description: "Torneo corporativo CCU",
     slug: "ultrapadel",
     image: require("../../assets/ultrapadel.jpg"),
-    organizador: "Francisco Campos",
+    organizer: "Francisco Campos",
   },
-  // Puedes agregar más torneos si lo deseas
 ];
 
 let teams: Team[] = [
   {
     id: 'team1',
-    nombre: 'Ingeniería FC',
-    capitanId: 'user2', // ID del capitán
-    jugadores: ['user2', 'user3', 'user4'],
-    puntos: 9,
-    partidosJugados: 3,
-    partidosGanados: 3,
-    partidosEmpatados: 0,
-    partidosPerdidos: 0,
-    golesFavor: 8,
-    golesContra: 2,
-    diferenciaGoles: 6,
-    torneoSlug: 'liga-cai-uc',
+    name: 'Ingeniería',
+    captainId: 'user2', 
+    players: ['user2', 'user3', 'user4'],
+    points: 9,
+    matchesPlayed: 3,
+    matchesWon: 3,
+    matchesDrawn: 0,
+    matchesLost: 0,
+    goalsFor: 8,
+    goalsAgainst: 2,
+    goalDifference: 6,
+    tournamentSlug: 'liga-cai-uc',
   },
   {
     id: 'team2',
-    nombre: 'Medicina United',
-    capitanId: 'user5',
-    jugadores: ['user5', 'user6', 'user7'],
-    puntos: 6,
-    partidosJugados: 3,
-    partidosGanados: 2,
-    partidosEmpatados: 0,
-    partidosPerdidos: 1,
-    golesFavor: 5,
-    golesContra: 3,
-    diferenciaGoles: 2,
-    torneoSlug: 'liga-cai-uc',
+    name: 'Medicina',
+    captainId: 'user5',
+    players: ['user5', 'user6', 'user7'],
+    points: 6,
+    matchesPlayed: 3,
+    matchesWon: 2,
+    matchesDrawn: 0,
+    matchesLost: 1,
+    goalsFor: 5,
+    goalsAgainst: 3,
+    goalDifference: 2,
+    tournamentSlug: 'liga-cai-uc',
   },
   {
     id: 'team3',
-    nombre: 'Derecho Club',
-    capitanId: 'user8',
-    jugadores: ['user8', 'user9', 'user10'],
-    puntos: 4,
-    partidosJugados: 3,
-    partidosGanados: 1,
-    partidosEmpatados: 1,
-    partidosPerdidos: 1,
-    golesFavor: 3,
-    golesContra: 4,
-    diferenciaGoles: -1,
-    torneoSlug: 'liga-cai-uc',
+    name: 'Derecho',
+    captainId: 'user8',
+    players: ['user8', 'user9', 'user10'],
+    points: 4,
+    matchesPlayed: 3,
+    matchesWon: 1,
+    matchesDrawn: 1,
+    matchesLost: 1,
+    goalsFor: 3,
+    goalsAgainst: 4,
+    goalDifference: -1,
+    tournamentSlug: 'liga-cai-uc',
   },
   {
     id: 'team4',
-    nombre: 'Arquitectura SC',
-    capitanId: 'user11',
-    jugadores: ['user11', 'user12', 'user13'],
-    puntos: 1,
-    partidosJugados: 3,
-    partidosGanados: 0,
-    partidosEmpatados: 1,
-    partidosPerdidos: 2,
-    golesFavor: 2,
-    golesContra: 6,
-    diferenciaGoles: -4,
-    torneoSlug: 'liga-cai-uc',
+    name: 'Arquitectura',
+    captainId: 'user11',
+    players: ['user11', 'user12', 'user13'],
+    points: 1,
+    matchesPlayed: 3,
+    matchesWon: 0,
+    matchesDrawn: 1,
+    matchesLost: 2,
+    goalsFor: 2,
+    goalsAgainst: 6,
+    goalDifference: -4,
+    tournamentSlug: 'liga-cai-uc',
   },
-  // Add more teams as needed
 ];
-
 
 let teamRegistrations: TeamRegistration[] = [
   {
     id: 'reg1',
-    equipoId: 'team1',
-    torneoSlug: 'liga-cai-uc',
-    estado: 'Pendiente',
+    teamId: 'team1',
+    tournamentSlug: 'liga-cai-uc',
+    status: 'Aceptado',
   },
-  // Agrega más registros si es necesario
+  {
+    id: 'reg2',
+    teamId: 'team2',
+    tournamentSlug: 'liga-cai-uc',
+    status: 'Aceptado',
+  },
+  {
+    id: 'reg3',
+    teamId: 'team3',
+    tournamentSlug: 'liga-cai-uc',
+    status: 'Aceptado',
+  },
+  {
+    id: 'reg4',
+    teamId: 'team4',
+    tournamentSlug: 'liga-cai-uc',
+    status: 'Aceptado',
+  },
 ];
 
 let matches: Match[] = [
-  // Partidos Finalizados
   {
     id: '1',
-    fecha: '2024-06-16',
-    hora: '16:00',
-    equipo1: 'Ingeniería FC',
-    equipo2: 'Medicina United',
-    resultado: '2-1',
-    torneoSlug: 'liga-cai-uc',
-    estado: 'Finalizado',
-    eventos: [
-      { minuto: 10, tipo: 'Gol', jugador: 'Juan Pérez', equipo: 'Ingeniería FC' },
-      { minuto: 45, tipo: 'Gol', jugador: 'Carlos López', equipo: 'Medicina United' },
-      { minuto: 70, tipo: 'Gol', jugador: 'Miguel Torres', equipo: 'Ingeniería FC' },
+    date: '2024-06-16',
+    time: '16:00',
+    team1: 'Ingeniería',
+    team2: 'Medicina',
+    result: '2-1',
+    tournamentSlug: 'liga-cai-uc',
+    status: 'Finalizado',
+    events: [
+      { minute: 10, type: 'Gol', player: 'Juan Pérez', team: 'Ingeniería FC' },
+      { minute: 45, type: 'Gol', player: 'Carlos López', team: 'Medicina United' },
+      { minute: 70, type: 'Gol', player: 'Miguel Torres', team: 'Ingeniería FC' },
     ],
   },
   {
     id: '2',
-    fecha: '2024-06-18',
-    hora: '18:00',
-    equipo1: 'Derecho Club',
-    equipo2: 'Arquitectura SC',
-    resultado: '1-1',
-    torneoSlug: 'liga-cai-uc',
-    estado: 'Finalizado',
-    eventos: [
-      { minuto: 30, tipo: 'Gol', jugador: 'Andrés Silva', equipo: 'Derecho Club' },
-      { minuto: 60, tipo: 'Gol', jugador: 'Luis Gómez', equipo: 'Arquitectura SC' },
+    date: '2024-06-18',
+    time: '18:00',
+    team1: 'Derecho',
+    team2: 'Arquitectura',
+    result: '1-1',
+    tournamentSlug: 'liga-cai-uc',
+    status: 'Finalizado',
+    events: [
+      { minute: 30, type: 'Gol', player: 'Andrés Silva', team: 'Derecho Club' },
+      { minute: 60, type: 'Gol', player: 'Luis Gómez', team: 'Arquitectura SC' },
     ],
   },
   // Partidos Pendientes
   {
     id: '3',
-    fecha: '2024-07-20',
-    hora: '15:00',
-    equipo1: 'Ingeniería FC',
-    equipo2: 'Arquitectura SC',
-    resultado: '',
-    torneoSlug: 'liga-cai-uc',
-    estado: 'Pendiente',
+    date: '2024-07-20',
+    time: '15:00',
+    team1: 'Ingeniería',
+    team2: 'Arquitectura',
+    result: '',
+    tournamentSlug: 'liga-cai-uc',
+    status: 'Pendiente',
   },
   {
     id: '4',
-    fecha: '2024-07-22',
-    hora: '17:00',
-    equipo1: 'Medicina United',
-    equipo2: 'Derecho Club',
-    resultado: '',
-    torneoSlug: 'liga-cai-uc',
-    estado: 'Pendiente',
+    date: '2024-07-22',
+    time: '17:00',
+    team1: 'Medicina',
+    team2: 'Derecho',
+    result: '',
+    tournamentSlug: 'liga-cai-uc',
+    status: 'Pendiente',
   },
-  // Agrega más partidos si lo deseas
 ];
 
 let players: Player[] = [
-  { id: 'player1', nombre: 'LA GACELA CAMPOS', equipoId: 'team1', equipoNombre: 'Ingeniería FC', goles: 5, torneoSlug: 'liga-cai-uc' },
-  { id: 'player2', nombre: 'Carlos López', equipoId: 'team2', equipoNombre: 'Medicina United', goles: 4, torneoSlug: 'liga-cai-uc' },
-  { id: 'player3', nombre: 'Andrés Silva', equipoId: 'team3', equipoNombre: 'Derecho Club', goles: 3, torneoSlug: 'liga-cai-uc' },
-  // Agrega más jugadores si lo deseas
+  { id: 'player1', name: 'LA GACELA CAMPOS', teamId: 'team1', teamName: 'Ingeniería', goals: 5, tournamentSlug: 'liga-cai-uc' },
+  { id: 'player2', name: 'Carlos López', teamId: 'team2', teamName: 'Medicina', goals: 4, tournamentSlug: 'liga-cai-uc' },
+  { id: 'player3', name: 'Andrés Silva', teamId: 'team3', teamName: 'Derecho', goals: 3, tournamentSlug: 'liga-cai-uc' },
 ];
-
+//cambiar el rol para ir intercalando entre las vistas, los roles son Capitan, Usuario y Admin
 let currentUser: User = {
   id: 'user2',
-  nombre: 'Diego Astudillo',
-  rol: 'Capitan',
+  name: 'Diego Astudillo',
+  rol: 'Admin',
 };
 
-// Funciones para obtener datos
 
 export async function getTournaments(): Promise<Tournament[]> {
   return tournaments;
@@ -256,7 +263,7 @@ export async function getTournamentBySlug(slug: string): Promise<Tournament | un
 }
 
 export async function getMatchesByTournament(slug: string): Promise<Match[]> {
-  return matches.filter((match) => match.torneoSlug === slug);
+  return matches.filter((match) => match.tournamentSlug === slug);
 }
 
 export async function getMatchById(id: string): Promise<Match | undefined> {
@@ -264,12 +271,11 @@ export async function getMatchById(id: string): Promise<Match | undefined> {
 }
 
 export async function getStandingsByTournament(slug: string): Promise<Team[]> {
-  return teams.filter((team) => team.torneoSlug === slug);
+  return teams.filter((team) => team.tournamentSlug === slug);
 }
 
-
 export async function getTopScorersByTournament(slug: string): Promise<Player[]> {
-  return players.filter((player) => player.torneoSlug === slug);
+  return players.filter((player) => player.tournamentSlug === slug);
 }
 
 export async function getCurrentUser(): Promise<User> {
@@ -280,35 +286,34 @@ export async function getTeamById(id: string): Promise<Team | undefined> {
   return teams.find((team) => team.id === id);
 }
 
-export async function registerTeamToTournament(equipoId: string, torneoSlug: string): Promise<TeamRegistration> {
+export async function registerTeamToTournament(teamId: string, tournamentSlug: string): Promise<TeamRegistration> {
   const newRegistration: TeamRegistration = {
     id: `reg${teamRegistrations.length + 1}`,
-    equipoId,
-    torneoSlug,
-    estado: 'Pendiente',
+    teamId,
+    tournamentSlug,
+    status: 'Pendiente',
   };
   teamRegistrations.push(newRegistration);
   return newRegistration;
 }
 
-export async function getTeamRegistrationsByTournament(torneoSlug: string): Promise<TeamRegistration[]> {
-  return teamRegistrations.filter((reg) => reg.torneoSlug === torneoSlug);
+export async function getTeamRegistrationsByTournament(tournamentSlug: string): Promise<TeamRegistration[]> {
+  return teamRegistrations.filter((reg) => reg.tournamentSlug === tournamentSlug);
 }
 
-export async function updateTeamRegistrationStatus(registrationId: string, estado: 'Aceptado' | 'Rechazado'): Promise<void> {
+export async function updateTeamRegistrationStatus(registrationId: string, status: 'Aceptado' | 'Rechazado'): Promise<void> {
   const registration = teamRegistrations.find((reg) => reg.id === registrationId);
   if (registration) {
-    registration.estado = estado;
+    registration.status = status;
   }
 }
 
-export async function getTeamsByTournament(torneoSlug: string): Promise<Team[]> {
-  // Obtener los equipos que han sido aceptados en el torneo
+export async function getTeamsByTournament(tournamentSlug: string): Promise<Team[]> {
   const acceptedRegistrations = teamRegistrations.filter(
-    (reg) => reg.torneoSlug === torneoSlug && reg.estado === 'Aceptado'
+    (reg) => reg.tournamentSlug === tournamentSlug && reg.status === 'Aceptado'
   );
 
-  const teamIds = acceptedRegistrations.map((reg) => reg.equipoId);
+  const teamIds = acceptedRegistrations.map((reg) => reg.teamId);
   return teams.filter((team) => teamIds.includes(team.id));
 }
 
@@ -326,27 +331,27 @@ export async function updateMatch(match: Match): Promise<void> {
 export async function addEventToMatch(matchId: string, event: MatchEvent): Promise<void> {
   const match = matches.find((m) => m.id === matchId);
   if (match) {
-    if (!match.eventos) {
-      match.eventos = [];
+    if (!match.events) {
+      match.events = [];
     }
-    match.eventos.push(event);
+    match.events.push(event);
   }
 }
 
 export async function getTeamByCaptainId(captainId: string): Promise<Team | undefined> {
-  return teams.find((team) => team.capitanId === captainId);
+  return teams.find((team) => team.captainId === captainId);
 }
 
 export async function addPlayerToTeam(teamId: string, playerName: string): Promise<void> {
   const team = teams.find((t) => t.id === teamId);
   if (team) {
-    team.jugadores.push(playerName);
+    team.players.push(playerName);
   }
 }
 
 export async function removePlayerFromTeam(teamId: string, playerName: string): Promise<void> {
   const team = teams.find((t) => t.id === teamId);
   if (team) {
-    team.jugadores = team.jugadores.filter((player) => player !== playerName);
+    team.players = team.players.filter((player) => player !== playerName);
   }
 }

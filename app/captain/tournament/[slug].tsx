@@ -35,10 +35,10 @@ export default function CaptainTournamentDetail() {
 
       // Verificar si el equipo ya está inscrito
       const registrations = await getTeamRegistrationsByTournament(slug as string);
-      const teamRegistration = registrations.find((reg) => reg.equipoId === team?.id);
+      const teamRegistration = registrations.find((reg) => reg.teamId === team?.id);
 
       if (teamRegistration) {
-        setRegistrationStatus(teamRegistration.estado);
+        setRegistrationStatus(teamRegistration.status);
       }
     }
     fetchData();
@@ -65,9 +65,9 @@ export default function CaptainTournamentDetail() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{tournament.nombre}</Text>
-      <Text style={styles.detail}>Ubicación: {tournament.ubicacion}</Text>
-      <Text style={styles.detail}>Fecha: {tournament.fecha}</Text>
+      <Text style={styles.title}>{tournament.name}</Text>
+      <Text style={styles.detail}>Ubicación: {tournament.location}</Text>
+      <Text style={styles.detail}>Fecha: {tournament.date}</Text>
       <Text style={styles.detail}>Descripción: {tournament.description}</Text>
 
       {registrationStatus === 'No Registrado' && (

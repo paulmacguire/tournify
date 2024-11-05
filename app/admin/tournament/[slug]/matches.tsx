@@ -1,4 +1,3 @@
-// app/admin/tournament/[slug]/matches.tsx
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, FlatList, Alert } from 'react-native';
@@ -42,9 +41,9 @@ export default function AdminMatches() {
           <Link href={`/admin/tournament/${slug}/matches/${item.id}`} asChild>
             <Pressable style={styles.card}>
               <Text style={styles.matchText}>
-                {item.equipo1} vs {item.equipo2}
+                {item.team1} vs {item.team2}
               </Text>
-              <Text style={styles.matchText}>Fecha: {item.fecha}</Text>
+              <Text style={styles.matchText}>Fecha: {item.date}</Text>
             </Pressable>
           </Link>
         )}

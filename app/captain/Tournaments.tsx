@@ -27,8 +27,8 @@ export default function CaptainTournaments() {
             <Pressable style={styles.card}>
               <Image source={item.image} style={styles.image} />
               <View style={styles.textContainer}>
-                <Text style={styles.tournamentName}>{item.nombre}</Text>
-                <Text style={styles.tournamentDate}>{item.fecha}</Text>
+                <Text style={styles.tournamentName}>{item.name}</Text>
+                <Text style={styles.tournamentDate}>{item.date}</Text>
               </View>
             </Pressable>
           </Link>

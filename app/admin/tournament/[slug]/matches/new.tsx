@@ -1,8 +1,7 @@
-// app/admin/tournament/[slug]/matches/new.tsx
-
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, TextInput, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker'; // Importación actualizada
+import { View, Text, StyleSheet, Pressable, Alert, ScrollView, Platform } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
   getTeamsByTournament,
@@ -14,10 +13,12 @@ import {
 export default function AdminMatchForm() {
   const { slug } = useLocalSearchParams();
   const [teams, setTeams] = useState<Team[]>([]);
-  const [equipo1, setEquipo1] = useState<string>('');
-  const [equipo2, setEquipo2] = useState<string>('');
-  const [fecha, setFecha] = useState<string>('');
-  const [hora, setHora] = useState<string>('');
+  const [team1, setTeam1] = useState<string>('');
+  const [team2, setTeam2] = useState<string>('');
+  const [date, setDate] = useState<Date>(new Date());
+  const [time, setTime] = useState<Date>(new Date());
+  const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false);
+  const [timePickerVisible, setTimePickerVisible] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -29,25 +30,28 @@ export default function AdminMatchForm() {
   }, [slug]);
 
   const handleCreateMatch = async () => {
-    if (!equipo1 || !equipo2 || !fecha || !hora) {
+    if (!team1 || !team2) {
       Alert.alert('Error', 'Por favor, completa todos los campos.');
       return;
     }
 
-    if (equipo1 === equipo2) {
+    if (team1 === team2) {
       Alert.alert('Error', 'Los equipos deben ser diferentes.');
       return;
     }
 
+    const dateString = date.toISOString().split('T')[0];
+    const timeString = time.toTimeString().split(' ')[0].substring(0, 5);
+
     const newMatch: Match = {
       id: `match${Date.now()}`,
-      fecha,
-      hora,
-      equipo1,
-      equipo2,
-      resultado: '',
-      torneoSlug: slug as string,
-      estado: 'Pendiente',
+      date: dateString,
+      time: timeString,
+      team1,
+      team2,
+      result: '',
+      tournamentSlug: slug as string,
+      status: 'Pendiente',
     };
 
     await createMatch(newMatch);
@@ -57,98 +61,131 @@ export default function AdminMatchForm() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Crear Nuevo Partido</Text>
 
       <Text style={styles.label}>Equipo 1:</Text>
-      <Picker
-        selectedValue={equipo1}
-        onValueChange={(itemValue: string) => setEquipo1(itemValue)} // Tipo especificado
-        style={styles.picker}
-      >
-        <Picker.Item label="Seleccione un equipo" value="" />
-        {teams.map((team) => (
-          <Picker.Item key={team.id} label={team.nombre} value={team.nombre} />
-        ))}
-      </Picker>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={team1}
+          onValueChange={(itemValue: string) => setTeam1(itemValue)}
+          style={styles.picker}
+          dropdownIconColor="#FFFFFF"
+          mode="dropdown"
+        >
+          <Picker.Item label="Seleccione un equipo" value="" color="#FFFFFF" />
+          {teams.map((team) => (
+            <Picker.Item key={team.id} label={team.name} value={team.name} color="#FFFFFF" />
+          ))}
+        </Picker>
+      </View>
 
       <Text style={styles.label}>Equipo 2:</Text>
-      <Picker
-        selectedValue={equipo2}
-        onValueChange={(itemValue: string) => setEquipo2(itemValue)} // Tipo especificado
-        style={styles.picker}
-      >
-        <Picker.Item label="Seleccione un equipo" value="" />
-        {teams.map((team) => (
-          <Picker.Item key={team.id} label={team.nombre} value={team.nombre} />
-        ))}
-      </Picker>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={team2}
+          onValueChange={(itemValue: string) => setTeam2(itemValue)}
+          style={styles.picker}
+          dropdownIconColor="#FFFFFF"
+          mode="dropdown"
+        >
+          <Picker.Item label="Seleccione un equipo" value="" color="#FFFFFF" />
+          {teams.map((team) => (
+            <Picker.Item key={team.id} label={team.name} value={team.name} color="#FFFFFF" />
+          ))}
+        </Picker>
+      </View>
 
       <Text style={styles.label}>Fecha:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="YYYY-MM-DD"
-        placeholderTextColor="#B0B0B0"
-        value={fecha}
-        onChangeText={setFecha}
+      <Pressable style={styles.input} onPress={() => setDatePickerVisible(true)}>
+        <Text style={styles.inputText}>{date.toLocaleDateString()}</Text>
+      </Pressable>
+      <DateTimePickerModal
+        isVisible={datePickerVisible}
+        mode="date"
+        onConfirm={(selectedDate) => {
+          setDate(selectedDate);
+          setDatePickerVisible(false);
+        }}
+        onCancel={() => setDatePickerVisible(false)}
+        locale="es-ES"
+        isDarkModeEnabled={true}
+        textColor='#FFFFFF'
       />
 
       <Text style={styles.label}>Hora:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="HH:MM"
-        placeholderTextColor="#B0B0B0"
-        value={hora}
-        onChangeText={setHora}
+      <Pressable style={styles.input} onPress={() => setTimePickerVisible(true)}>
+        <Text style={styles.inputText}>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+      </Pressable>
+      <DateTimePickerModal
+        isVisible={timePickerVisible}
+        mode="time"
+        onConfirm={(selectedTime) => {
+          setTime(selectedTime);
+          setTimePickerVisible(false);
+        }}
+        onCancel={() => setTimePickerVisible(false)}
+        locale="es-ES"
+        is24Hour={true}
+        isDarkModeEnabled={true}
+        textColor='#FFFFFF'
       />
 
       <Pressable style={styles.button} onPress={handleCreateMatch}>
         <Text style={styles.buttonText}>Crear Partido</Text>
       </Pressable>
-    </View>
+    </ScrollView>
   );
 }
 
-// Asegúrate de que la función createMatch existe en tu mockDataTournify.ts
-// y que está correctamente implementada.
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 16,
     backgroundColor: '#1A1A1D',
+    flexGrow: 1,
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     color: '#FFFFFF',
-    marginBottom: 16,
+    marginBottom: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   label: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 18,
     marginTop: 12,
+    marginBottom: 4,
+  },
+  pickerContainer: {
+    backgroundColor: '#2C2C2E',
+    borderRadius: 8,
+    marginBottom: 12,
+    overflow: 'hidden',
   },
   picker: {
-    backgroundColor: '#2C2C2E',
     color: '#FFFFFF',
-    marginTop: 8,
   },
   input: {
     backgroundColor: '#2C2C2E',
-    color: '#FFFFFF',
-    padding: 8,
+    padding: 12,
     borderRadius: 8,
-    marginTop: 8,
+    marginBottom: 12,
+  },
+  inputText: {
+    color: '#FFFFFF',
+    fontSize: 16,
   },
   button: {
     backgroundColor: '#FFD700',
-    padding: 12,
+    paddingVertical: 16,
     borderRadius: 8,
     marginTop: 24,
   },
   buttonText: {
     color: '#1A1A1D',
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
     fontWeight: 'bold',
   },

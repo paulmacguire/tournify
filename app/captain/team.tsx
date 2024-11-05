@@ -28,7 +28,7 @@ export default function CaptainTeam() {
     Alert.alert('Jugador agregado', `${newPlayerName} ha sido agregado al equipo.`);
     setNewPlayerName('');
     // Actualizar el equipo
-    const updatedTeam = await getTeamByCaptainId(team!.capitanId);
+    const updatedTeam = await getTeamByCaptainId(team!.captainId);
     setTeam(updatedTeam);
   };
 
@@ -36,7 +36,7 @@ export default function CaptainTeam() {
     await removePlayerFromTeam(team!.id, playerName);
     Alert.alert('Jugador eliminado', `${playerName} ha sido eliminado del equipo.`);
     // Actualizar el equipo
-    const updatedTeam = await getTeamByCaptainId(team!.capitanId);
+    const updatedTeam = await getTeamByCaptainId(team!.captainId);
     setTeam(updatedTeam);
   };
 
@@ -50,11 +50,11 @@ export default function CaptainTeam() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Equipo: {team.nombre}</Text>
+      <Text style={styles.title}>Equipo: {team.name}</Text>
 
       <Text style={styles.subtitle}>Jugadores</Text>
       <FlatList
-        data={team.jugadores}
+        data={team.players}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
           <View style={styles.playerItem}>
