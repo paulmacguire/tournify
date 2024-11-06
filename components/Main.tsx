@@ -3,6 +3,7 @@ import { FlatList, View, ActivityIndicator, StyleSheet } from "react-native";
 import { getTournaments, Tournament } from "../lib/services/mockDataTournify";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatedGameCard } from "../components/GameCard";
+
 export default function Main() {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const insets = useSafeAreaInsets();
@@ -22,14 +23,16 @@ export default function Main() {
           <ActivityIndicator color="#ffffff" />
         </View>
       ) : (
-        <FlatList
-          data={tournaments}
-          keyExtractor={(item) => item.slug}
-          renderItem={({ item, index }) => (
-            <AnimatedGameCard game={item} index={index} />
-          )}
-          contentContainerStyle={styles.listContent}
-        />
+        <>
+          <FlatList
+            data={tournaments}
+            keyExtractor={(item) => item.slug}
+            renderItem={({ item, index }) => (
+              <AnimatedGameCard game={item} index={index} />
+            )}
+            contentContainerStyle={styles.listContent}
+          />
+        </>
       )}
     </View>
   );
