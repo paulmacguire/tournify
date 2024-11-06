@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { getTournaments, Tournament } from "../../lib/services/common";
 import { Link } from "expo-router";
+// const image = require("../../assets/logo-torneo.jpg");
 
 export default function CaptainTournaments() {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
@@ -32,7 +33,10 @@ export default function CaptainTournaments() {
         renderItem={({ item }) => (
           <Link href={`/captain/tournament/${item.id}`} asChild>
             <Pressable style={styles.card}>
-              <Image source={item.image} style={styles.image} />
+              <Image
+                source={require("../../assets/ultrapadel.jpg")}
+                style={styles.image}
+              />
               <View style={styles.textContainer}>
                 <Text style={styles.tournamentName}>{item.name}</Text>
                 <Text style={styles.tournamentDate}>{item.date}</Text>

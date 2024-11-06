@@ -58,7 +58,6 @@ export default function CaptainTeam() {
   }, [team]); // Este efecto depende de `team`, por lo que se ejecutará después de que `team` esté disponible
 
   const handleAddPlayer = async (userName: string, userToInviteId: string) => {
-    console.log("Adding player", userName, userToInviteId);
     await addPlayerToTeam(team?.id as string, userToInviteId as string);
     Alert.alert("Jugador agregado", `${userName} ha sido agregado al equipo.`);
     // Actualizar el equipo
