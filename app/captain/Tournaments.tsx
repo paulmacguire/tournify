@@ -1,9 +1,16 @@
 // app/captain/Tournaments.tsx
 
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Pressable, Image } from 'react-native';
-import { getTournaments, Tournament } from '../../lib/services/mockDataTournify';
-import { Link } from 'expo-router';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Pressable,
+  Image,
+} from "react-native";
+import { getTournaments, Tournament } from "../../lib/services/common";
+import { Link } from "expo-router";
 
 export default function CaptainTournaments() {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
@@ -23,7 +30,7 @@ export default function CaptainTournaments() {
         data={tournaments}
         keyExtractor={(item) => item.slug}
         renderItem={({ item }) => (
-          <Link href={`/captain/tournament/${item.slug}`} asChild>
+          <Link href={`/captain/tournament/${item.id}`} asChild>
             <Pressable style={styles.card}>
               <Image source={item.image} style={styles.image} />
               <View style={styles.textContainer}>
@@ -42,37 +49,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#1A1A1D',
+    backgroundColor: "#1A1A1D",
   },
   title: {
     fontSize: 28,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     marginBottom: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   card: {
-    backgroundColor: '#2C2C2E',
+    backgroundColor: "#2C2C2E",
     borderRadius: 12,
     marginBottom: 12,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 180,
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
   textContainer: {
     padding: 12,
   },
   tournamentName: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   tournamentDate: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
   },
 });

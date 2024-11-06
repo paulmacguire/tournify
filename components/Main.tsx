@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, View, ActivityIndicator, StyleSheet } from "react-native";
-import { getTournaments, Tournament } from "../lib/services/mockDataTournify";
+import { getTournaments, Tournament } from "../lib/services/common";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatedGameCard } from "../components/GameCard";
 

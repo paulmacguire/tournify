@@ -4,16 +4,17 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
-  getTournamentBySlug,
   Tournament,
   registerTeamToTournament,
   getTeamById,
   getTeamRegistrationsByTournament,
-} from "../../../lib/services/mockDataTournify";
+  getTournamentById,
+  getTeamByCaptainId,
+} from "../../../lib/services/common";
 import useUserStore from "@/stores/useUserStore";
 
 export default function CaptainTournamentDetail() {
-  const { slug } = useLocalSearchParams();
+  const { id } = useLocalSearchParams();
   const [tournament, setTournament] = useState<Tournament | undefined>();
   const [registrationStatus, setRegistrationStatus] = useState<
     "No Registrado" | "Pendiente" | "Aceptado" | "Rechazado"
@@ -24,15 +25,15 @@ export default function CaptainTournamentDetail() {
 
   useEffect(() => {
     async function fetchData() {
-      const torneo = await getTournamentBySlug(slug as string);
+      const torneo = await getTournamentById(id as string);
       setTournament(torneo);
 
       // Obtener el equipo del capitán
-      const team = await getTeamById("team1"); // Suponemos que el capitán tiene el equipo 'team1'
+      const team = await getTeamByCaptainId(user?.id as string); 
 
       // Verificar si el equipo ya está inscrito
       const registrations = await getTeamRegistrationsByTournament(
-        slug as string,
+        id as string,
       );
       const teamRegistration = registrations.find(
         (reg) => reg.teamId === team?.id,
@@ -43,7 +44,7 @@ export default function CaptainTournamentDetail() {
       }
     }
     fetchData();
-  }, [slug]);
+  }, [id]);
 
   const handleRegistration = async () => {
     if (!user) return;
@@ -51,7 +52,7 @@ export default function CaptainTournamentDetail() {
     // Suponemos que el equipo del capitán es 'team1'
     const teamId = "team1";
 
-    await registerTeamToTournament(teamId, slug as string);
+    await registerTeamToTournament(teamId, id as string);
     setRegistrationStatus("Pendiente");
     Alert.alert(
       "Inscripción enviada",

@@ -10,10 +10,9 @@ import {
   Alert,
 } from "react-native";
 import {
-  getCurrentUser,
   getTournaments,
   Tournament,
-} from "../../lib/services/mockDataTournify";
+} from "../../lib/services/common";
 import { useRouter } from "expo-router";
 
 import useUserStore from "@/stores/useUserStore";

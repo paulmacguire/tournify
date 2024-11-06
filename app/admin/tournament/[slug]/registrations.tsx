@@ -1,14 +1,13 @@
-
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 import {
   getTeamRegistrationsByTournament,
   TeamRegistration,
   updateTeamRegistrationStatus,
   getTeamById,
   Team,
-} from '../../../../lib/services/mockDataTournify';
+} from "../../../../lib/services/common";
 
 export default function AdminRegistrations() {
   const { slug } = useLocalSearchParams();
@@ -33,9 +32,15 @@ export default function AdminRegistrations() {
     fetchData();
   }, [slug]);
 
-  const handleUpdateStatus = async (registrationId: string, estado: 'Aceptado' | 'Rechazado') => {
+  const handleUpdateStatus = async (
+    registrationId: string,
+    estado: "Aceptado" | "Rechazado",
+  ) => {
     await updateTeamRegistrationStatus(registrationId, estado);
-    Alert.alert('Estado actualizado', `La inscripción ha sido ${estado.toLowerCase()}.`);
+    Alert.alert(
+      "Estado actualizado",
+      `La inscripción ha sido ${estado.toLowerCase()}.`,
+    );
     // Refrescar la lista de inscripciones
     const regs = await getTeamRegistrationsByTournament(slug as string);
     setRegistrations(regs);
@@ -48,17 +53,17 @@ export default function AdminRegistrations() {
         <View key={reg.id} style={styles.card}>
           <Text style={styles.teamName}>{teams[reg.teamId]?.name}</Text>
           <Text style={styles.status}>Estado: {reg.status}</Text>
-          {reg.status === 'Pendiente' && (
+          {reg.status === "Pendiente" && (
             <View style={styles.buttonContainer}>
               <Pressable
                 style={[styles.button, styles.acceptButton]}
-                onPress={() => handleUpdateStatus(reg.id, 'Aceptado')}
+                onPress={() => handleUpdateStatus(reg.id, "Aceptado")}
               >
                 <Text style={styles.buttonText}>Aceptar</Text>
               </Pressable>
               <Pressable
                 style={[styles.button, styles.rejectButton]}
-                onPress={() => handleUpdateStatus(reg.id, 'Rechazado')}
+                onPress={() => handleUpdateStatus(reg.id, "Rechazado")}
               >
                 <Text style={styles.buttonText}>Rechazar</Text>
               </Pressable>
@@ -74,32 +79,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#1A1A1D',
+    backgroundColor: "#1A1A1D",
   },
   title: {
     fontSize: 24,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     marginBottom: 16,
   },
   card: {
-    backgroundColor: '#2C2C2E',
+    backgroundColor: "#2C2C2E",
     padding: 16,
     borderRadius: 8,
     marginBottom: 12,
   },
   teamName: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 18,
     marginBottom: 8,
   },
   status: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
     marginBottom: 8,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   button: {
     flex: 1,
@@ -108,15 +113,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   acceptButton: {
-    backgroundColor: '#00FF00',
+    backgroundColor: "#00FF00",
   },
   rejectButton: {
-    backgroundColor: '#FF0000',
+    backgroundColor: "#FF0000",
   },
   buttonText: {
-    color: '#1A1A1D',
+    color: "#1A1A1D",
     fontSize: 16,
-    textAlign: 'center',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontWeight: "bold",
   },
 });

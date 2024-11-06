@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { getCurrentUser } from "../../lib/services/mockDataTournify";
 import { useRouter, useNavigation } from "expo-router";
 
 import useUserStore from "@/stores/useUserStore";

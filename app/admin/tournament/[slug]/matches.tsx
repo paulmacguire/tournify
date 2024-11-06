@@ -1,13 +1,19 @@
-
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, FlatList, Alert } from 'react-native';
-import { useLocalSearchParams, Link } from 'expo-router';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  Alert,
+} from "react-native";
+import { useLocalSearchParams, Link } from "expo-router";
 import {
   getMatchesByTournament,
   Match,
   getTeamsByTournament,
   Team,
-} from '../../../../lib/services/mockDataTournify';
+} from "../../../../lib/services/common";
 
 export default function AdminMatches() {
   const { slug } = useLocalSearchParams();
@@ -56,33 +62,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#1A1A1D',
+    backgroundColor: "#1A1A1D",
   },
   title: {
     fontSize: 24,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     marginBottom: 16,
   },
   button: {
-    backgroundColor: '#FFD700',
+    backgroundColor: "#FFD700",
     padding: 12,
     borderRadius: 8,
     marginBottom: 24,
   },
   buttonText: {
-    color: '#1A1A1D',
+    color: "#1A1A1D",
     fontSize: 16,
-    textAlign: 'center',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontWeight: "bold",
   },
   card: {
-    backgroundColor: '#2C2C2E',
+    backgroundColor: "#2C2C2E",
     padding: 16,
     borderRadius: 8,
     marginBottom: 12,
   },
   matchText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
   },
 });

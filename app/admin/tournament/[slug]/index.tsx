@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useLocalSearchParams, Link } from "expo-router";
 import {
-  getTournamentBySlug,
+  getTournamentById,
   Tournament,
-  getCurrentUser,
   User,
-} from "../../../../lib/services/mockDataTournify";
+} from "../../../../lib/services/common";
 import useUserStore from "@/stores/useUserStore";
 
 export default function AdminTournamentPanel() {
