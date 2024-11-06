@@ -68,7 +68,7 @@ export interface Match {
 export interface User {
   id: string;
   name: string;
-  role: "Usuario" | "Capitan" | "Admin";
+  role: "Jugador" | "Capitan" | "Admin";
 }
 
 export async function getTournaments(): Promise<Tournament[]> {
@@ -230,6 +230,25 @@ export async function getTeamByCaptainId(
   }
 }
 
+export async function getUsersByPlayerRole() {
+  try {
+    const response = await axios.get(
+      `${process.env.EXPO_PUBLIC_API_URL}/users`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      },
+    );
+    const filteredUsers = response.data.filter(
+      (user: User) => user.role === "Jugador" || user.role === "Capitan",
+    );
+    return filteredUsers;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+}
 export async function addPlayerToTeam(
   teamId: string,
   userId: string,
@@ -253,10 +272,21 @@ export async function addPlayerToTeam(
 
 export async function removePlayerFromTeam(
   teamId: string,
-  playerName: string,
+  userId: string,
 ): Promise<void> {
-  const team = teams.find((t) => t.id === teamId);
-  if (team) {
-    team.players = team.players.filter((player) => player !== playerName);
+  try {
+    const response = await axios.post(
+      `${process.env.EXPO_PUBLIC_API_URL}/teams/remove_player`,
+      { team_id: teamId, user_id: userId },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      },
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
   }
 }

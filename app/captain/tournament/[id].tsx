@@ -6,7 +6,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   Tournament,
   registerTeamToTournament,
-  getTeamById,
   getTeamRegistrationsByTournament,
   getTournamentById,
   getTeamByCaptainId,
