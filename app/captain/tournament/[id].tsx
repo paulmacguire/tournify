@@ -6,7 +6,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   Tournament,
   registerTeamToTournament,
-  getTeamById,
   getTeamRegistrationsByTournament,
   getTournamentById,
   getTeamByCaptainId,
@@ -29,7 +28,7 @@ export default function CaptainTournamentDetail() {
       setTournament(torneo);
 
       // Obtener el equipo del capitán
-      const team = await getTeamByCaptainId(user?.id as string); 
+      const team = await getTeamByCaptainId(user?.id as string);
 
       // Verificar si el equipo ya está inscrito
       const registrations = await getTeamRegistrationsByTournament(
