@@ -1,3 +1,5 @@
+// app/admin/Home.tsx
+
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -31,10 +33,7 @@ export default function AdminHome() {
         return;
       }
 
-      // Obtener los torneos que el admin puede gestionar
       const allTournaments = await getTournaments();
-      // Suponiendo que el admin puede gestionar todos los torneos
-      // Si no, filtrar los torneos por algún criterio
       setTournaments(allTournaments);
     }
     fetchData();
@@ -44,12 +43,15 @@ export default function AdminHome() {
     router.push(`/admin/tournament/${slug}`);
   };
 
+  const handleNavigateToNewTournament = () => {
+    router.push("/admin/tournament/new-tournament");
+  };
+
   const handleLogout = async () => {
     try {
-      await AsyncStorage.removeItem("userId"); // Cambia "userId" si usas otra clave
+      await AsyncStorage.removeItem("userId");
       Alert.alert("Logout", "Se ha eliminado el userId del almacenamiento.");
       router.replace("/auth");
-      // Puedes agregar aquí redirección a la pantalla de login, si es necesario
     } catch (error) {
       Alert.alert("Error", "Hubo un problema al eliminar el userId.");
     }
@@ -61,6 +63,12 @@ export default function AdminHome() {
         <Text style={styles.buttonText}>Cerrar Sesión</Text>
       </TouchableOpacity>
       <Text style={styles.title}>Panel del Admin {user?.name}</Text>
+
+      {/* Botón para crear nuevo torneo */}
+      <TouchableOpacity onPress={handleNavigateToNewTournament} style={styles.createButton}>
+        <Text style={styles.buttonText}>Crear Nuevo Torneo</Text>
+      </TouchableOpacity>
+
       <Text style={styles.subtitle}>Seleccione un torneo para gestionar:</Text>
       <FlatList
         data={tournaments}
@@ -83,7 +91,6 @@ export default function AdminHome() {
 }
 
 const styles = StyleSheet.create({
-  // Estilos aquí
   container: {
     flex: 1,
     padding: 16,
@@ -141,5 +148,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "600",
+  },
+  createButton: {
+    backgroundColor: "#10B981", // Color verde para destacar el botón de creación de torneo
+    padding: 16,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 16,
   },
 });
