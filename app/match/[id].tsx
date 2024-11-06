@@ -1,8 +1,7 @@
-
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useLocalSearchParams, Link } from "expo-router";
-import { getMatchById, Match, MatchEvent } from "../../lib/services/mockDataTournify";
+import { getMatchById, Match, MatchEvent } from "../../lib/services/common";
 import { SoccerBall } from "phosphor-react-native";
 
 export default function MatchDetails() {
@@ -25,22 +24,26 @@ export default function MatchDetails() {
     );
   }
 
-  const isPending = match.status === 'Pendiente';
+  const isPending = match.status === "Pendiente";
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <SoccerBall size={40} color="#ffffff" weight="fill" />
-        <Text style={styles.title}>{match.team1} vs {match.team2}</Text>
+        <Text style={styles.title}>
+          {match.team1} vs {match.team2}
+        </Text>
       </View>
       <Text style={styles.detailText}>Fecha: {match.date}</Text>
       <Text style={styles.detailText}>Hora: {match.time}</Text>
       <Text style={styles.detailText}>
-        Resultado: {isPending ? 'Por jugar' : match.result || 'No definido'}
+        Resultado: {isPending ? "Por jugar" : match.result || "No definido"}
       </Text>
 
       {isPending ? (
-        <Text style={styles.pendingText}>Este partido aún no se ha jugado.</Text>
+        <Text style={styles.pendingText}>
+          Este partido aún no se ha jugado.
+        </Text>
       ) : (
         <>
           <Text style={styles.sectionTitle}>Eventos del Partido</Text>
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
     color: "#FFD700",
     fontSize: 16,
     marginTop: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   sectionTitle: {
     fontSize: 20,

@@ -1,20 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Alert, ScrollView, Platform } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Alert,
+  ScrollView,
+  Platform,
+} from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   getTeamsByTournament,
   Team,
   createMatch,
   Match,
-} from '../../../../../lib/services/mockDataTournify';
+} from "../../../../../lib/services/common";
 
 export default function AdminMatchForm() {
   const { slug } = useLocalSearchParams();
   const [teams, setTeams] = useState<Team[]>([]);
-  const [team1, setTeam1] = useState<string>('');
-  const [team2, setTeam2] = useState<string>('');
+  const [team1, setTeam1] = useState<string>("");
+  const [team2, setTeam2] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
   const [time, setTime] = useState<Date>(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false);
@@ -31,17 +39,17 @@ export default function AdminMatchForm() {
 
   const handleCreateMatch = async () => {
     if (!team1 || !team2) {
-      Alert.alert('Error', 'Por favor, completa todos los campos.');
+      Alert.alert("Error", "Por favor, completa todos los campos.");
       return;
     }
 
     if (team1 === team2) {
-      Alert.alert('Error', 'Los equipos deben ser diferentes.');
+      Alert.alert("Error", "Los equipos deben ser diferentes.");
       return;
     }
 
-    const dateString = date.toISOString().split('T')[0];
-    const timeString = time.toTimeString().split(' ')[0].substring(0, 5);
+    const dateString = date.toISOString().split("T")[0];
+    const timeString = time.toTimeString().split(" ")[0].substring(0, 5);
 
     const newMatch: Match = {
       id: `match${Date.now()}`,
@@ -49,14 +57,14 @@ export default function AdminMatchForm() {
       time: timeString,
       team1,
       team2,
-      result: '',
+      result: "",
       tournamentSlug: slug as string,
-      status: 'Pendiente',
+      status: "Pendiente",
     };
 
     await createMatch(newMatch);
 
-    Alert.alert('Partido creado', 'El partido ha sido creado exitosamente.');
+    Alert.alert("Partido creado", "El partido ha sido creado exitosamente.");
     router.back();
   };
 
@@ -75,7 +83,12 @@ export default function AdminMatchForm() {
         >
           <Picker.Item label="Seleccione un equipo" value="" color="#FFFFFF" />
           {teams.map((team) => (
-            <Picker.Item key={team.id} label={team.name} value={team.name} color="#FFFFFF" />
+            <Picker.Item
+              key={team.id}
+              label={team.name}
+              value={team.name}
+              color="#FFFFFF"
+            />
           ))}
         </Picker>
       </View>
@@ -91,13 +104,21 @@ export default function AdminMatchForm() {
         >
           <Picker.Item label="Seleccione un equipo" value="" color="#FFFFFF" />
           {teams.map((team) => (
-            <Picker.Item key={team.id} label={team.name} value={team.name} color="#FFFFFF" />
+            <Picker.Item
+              key={team.id}
+              label={team.name}
+              value={team.name}
+              color="#FFFFFF"
+            />
           ))}
         </Picker>
       </View>
 
       <Text style={styles.label}>Fecha:</Text>
-      <Pressable style={styles.input} onPress={() => setDatePickerVisible(true)}>
+      <Pressable
+        style={styles.input}
+        onPress={() => setDatePickerVisible(true)}
+      >
         <Text style={styles.inputText}>{date.toLocaleDateString()}</Text>
       </Pressable>
       <DateTimePickerModal
@@ -110,12 +131,17 @@ export default function AdminMatchForm() {
         onCancel={() => setDatePickerVisible(false)}
         locale="es-ES"
         isDarkModeEnabled={true}
-        textColor='#FFFFFF'
+        textColor="#FFFFFF"
       />
 
       <Text style={styles.label}>Hora:</Text>
-      <Pressable style={styles.input} onPress={() => setTimePickerVisible(true)}>
-        <Text style={styles.inputText}>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+      <Pressable
+        style={styles.input}
+        onPress={() => setTimePickerVisible(true)}
+      >
+        <Text style={styles.inputText}>
+          {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+        </Text>
       </Pressable>
       <DateTimePickerModal
         isVisible={timePickerVisible}
@@ -128,7 +154,7 @@ export default function AdminMatchForm() {
         locale="es-ES"
         is24Hour={true}
         isDarkModeEnabled={true}
-        textColor='#FFFFFF'
+        textColor="#FFFFFF"
       />
 
       <Pressable style={styles.button} onPress={handleCreateMatch}>
@@ -141,52 +167,52 @@ export default function AdminMatchForm() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: '#1A1A1D',
+    backgroundColor: "#1A1A1D",
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   title: {
     fontSize: 28,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     marginBottom: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   label: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 18,
     marginTop: 12,
     marginBottom: 4,
   },
   pickerContainer: {
-    backgroundColor: '#2C2C2E',
+    backgroundColor: "#2C2C2E",
     borderRadius: 8,
     marginBottom: 12,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   picker: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
   input: {
-    backgroundColor: '#2C2C2E',
+    backgroundColor: "#2C2C2E",
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
   },
   inputText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
   },
   button: {
-    backgroundColor: '#FFD700',
+    backgroundColor: "#FFD700",
     paddingVertical: 16,
     borderRadius: 8,
     marginTop: 24,
   },
   buttonText: {
-    color: '#1A1A1D',
+    color: "#1A1A1D",
     fontSize: 18,
-    textAlign: 'center',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontWeight: "bold",
   },
 });

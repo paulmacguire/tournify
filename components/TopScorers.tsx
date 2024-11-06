@@ -1,7 +1,6 @@
-
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Player } from '../lib/services/mockDataTournify';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { Player } from "../lib/services/common";
 
 interface TopScorersProps {
   topScorers: Player[];
@@ -27,19 +26,19 @@ const TopScorers: React.FC<TopScorersProps> = ({ topScorers }) => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 24,
-    backgroundColor: '#2C2C2E',
+    backgroundColor: "#2C2C2E",
     borderRadius: 12,
     padding: 16,
   },
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 12,
   },
   position: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     width: 30,
   },
   playerInfo: {
@@ -47,17 +46,17 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   name: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
   },
   team: {
-    color: '#B0B0B0',
+    color: "#B0B0B0",
     fontSize: 14,
   },
   goals: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 

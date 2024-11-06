@@ -1,22 +1,39 @@
 // app/admin/tournament/[slug]/matches/[id].tsx
 
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Alert, TextInput, ScrollView, Modal } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { getMatchById, Match, MatchEvent, updateMatch, addEventToMatch } from '../../../../../lib/services/mockDataTournify';
-import { Picker } from '@react-native-picker/picker';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Alert,
+  TextInput,
+  ScrollView,
+  Modal,
+} from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import {
+  getMatchById,
+  Match,
+  MatchEvent,
+  updateMatch,
+  addEventToMatch,
+} from "../../../../../lib/services/common";
+import { Picker } from "@react-native-picker/picker";
 
 export default function AdminMatchDetail() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const [match, setMatch] = useState<Match | undefined>();
-  const [eventType, setEventType] = useState<'Gol' | 'Tarjeta Amarilla' | 'Tarjeta Roja' | 'Sustitución'>('Gol');
-  const [minute, setMinute] = useState<string>('');
-  const [playerName, setPlayerName] = useState<string>('');
-  const [teamName, setTeamName] = useState<string>('');
-  const [detail, setDetail] = useState<string>('');
+  const [eventType, setEventType] = useState<
+    "Gol" | "Tarjeta Amarilla" | "Tarjeta Roja" | "Sustitución"
+  >("Gol");
+  const [minute, setMinute] = useState<string>("");
+  const [playerName, setPlayerName] = useState<string>("");
+  const [teamName, setTeamName] = useState<string>("");
+  const [detail, setDetail] = useState<string>("");
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [resultInput, setResultInput] = useState<string>('');
+  const [resultInput, setResultInput] = useState<string>("");
 
   useEffect(() => {
     async function fetchMatch() {
@@ -28,7 +45,7 @@ export default function AdminMatchDetail() {
 
   const handleAddEvent = async () => {
     if (!minute || !playerName || !teamName) {
-      Alert.alert('Error', 'Por favor, completa todos los campos del evento.');
+      Alert.alert("Error", "Por favor, completa todos los campos del evento.");
       return;
     }
 
@@ -41,11 +58,11 @@ export default function AdminMatchDetail() {
     };
 
     await addEventToMatch(match!.id, newEvent);
-    Alert.alert('Evento agregado', 'El evento ha sido agregado al partido.');
-    setMinute('');
-    setPlayerName('');
-    setTeamName('');
-    setDetail('');
+    Alert.alert("Evento agregado", "El evento ha sido agregado al partido.");
+    setMinute("");
+    setPlayerName("");
+    setTeamName("");
+    setDetail("");
     // Actualizar el partido
     const updatedMatch = await getMatchById(id as string);
     setMatch(updatedMatch);
@@ -60,15 +77,18 @@ export default function AdminMatchDetail() {
       const updatedMatch: Match = {
         ...match!,
         result: resultInput,
-        status: 'Finalizado',
+        status: "Finalizado",
       };
       await updateMatch(updatedMatch);
-      Alert.alert('Resultado actualizado', 'El resultado del partido ha sido actualizado.');
+      Alert.alert(
+        "Resultado actualizado",
+        "El resultado del partido ha sido actualizado.",
+      );
       setMatch(updatedMatch);
       setModalVisible(false);
-      setResultInput('');
+      setResultInput("");
     } else {
-      Alert.alert('Error', 'Por favor, ingresa un resultado válido.');
+      Alert.alert("Error", "Por favor, ingresa un resultado válido.");
     }
   };
 
@@ -82,11 +102,15 @@ export default function AdminMatchDetail() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>{match.team1} vs {match.team2}</Text>
+      <Text style={styles.title}>
+        {match.team1} vs {match.team2}
+      </Text>
       <Text style={styles.detail}>Fecha: {match.date}</Text>
       <Text style={styles.detail}>Hora: {match.time}</Text>
       <Text style={styles.detail}>Estado: {match.status}</Text>
-      <Text style={styles.detail}>Resultado: {match.result || 'No definido'}</Text>
+      <Text style={styles.detail}>
+        Resultado: {match.result || "No definido"}
+      </Text>
 
       <Pressable style={styles.button} onPress={handleUpdateResult}>
         <Text style={styles.buttonText}>Actualizar Resultado</Text>
@@ -103,7 +127,9 @@ export default function AdminMatchDetail() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Ingresa el resultado del partido (ejemplo: 2-1)</Text>
+            <Text style={styles.modalText}>
+              Ingresa el resultado del partido (ejemplo: 2-1)
+            </Text>
             <TextInput
               style={styles.modalInput}
               placeholder="Resultado"
@@ -114,8 +140,13 @@ export default function AdminMatchDetail() {
             <Pressable style={styles.modalButton} onPress={confirmUpdateResult}>
               <Text style={styles.buttonText}>Confirmar</Text>
             </Pressable>
-            <Pressable style={[styles.modalButton, { backgroundColor: '#2C2C2E' }]} onPress={() => setModalVisible(false)}>
-              <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>Cancelar</Text>
+            <Pressable
+              style={[styles.modalButton, { backgroundColor: "#2C2C2E" }]}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={[styles.buttonText, { color: "#FFFFFF" }]}>
+                Cancelar
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -128,9 +159,8 @@ export default function AdminMatchDetail() {
         selectedValue={eventType}
         onValueChange={(itemValue) => setEventType(itemValue)}
         style={styles.picker}
-        
       >
-        <Picker.Item label="Gol" value="Gol" color='#FFFFFF'/>
+        <Picker.Item label="Gol" value="Gol" color="#FFFFFF" />
         <Picker.Item label="Tarjeta Amarilla" color="#FFFFFF" />
         <Picker.Item label="Tarjeta Roja" color="#FFFFFF" />
         <Picker.Item label="Sustitución" color="#FFFFFF" />
@@ -164,7 +194,7 @@ export default function AdminMatchDetail() {
         onChangeText={setTeamName}
       />
 
-      {eventType === 'Sustitución' && (
+      {eventType === "Sustitución" && (
         <>
           <Text style={styles.label}>Detalle:</Text>
           <TextInput
@@ -188,13 +218,14 @@ export default function AdminMatchDetail() {
             <Text style={styles.eventText}>
               {event.minute}' - {event.type} - {event.player} ({event.team})
             </Text>
-            {event.detail && <Text style={styles.eventDetail}>{event.detail}</Text>}
+            {event.detail && (
+              <Text style={styles.eventDetail}>{event.detail}</Text>
+            )}
           </View>
         ))
       ) : (
         <Text style={styles.noEventsText}>No hay eventos registrados.</Text>
       )}
-
     </ScrollView>
   );
 }
@@ -205,52 +236,52 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#1A1A1D',
+    backgroundColor: "#1A1A1D",
   },
   title: {
     fontSize: 24,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     marginBottom: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   detail: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
     marginBottom: 8,
   },
   button: {
-    backgroundColor: '#FFD700',
+    backgroundColor: "#FFD700",
     padding: 12,
     borderRadius: 8,
     marginTop: 16,
   },
   buttonText: {
-    color: '#1A1A1D',
+    color: "#1A1A1D",
     fontSize: 16,
-    textAlign: 'center',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontWeight: "bold",
   },
   subtitle: {
     fontSize: 20,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     marginTop: 24,
     marginBottom: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   label: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
     marginTop: 12,
   },
   picker: {
-    backgroundColor: '#2C2C2E',
-    color: '#FFFFFF',
+    backgroundColor: "#2C2C2E",
+    color: "#FFFFFF",
     marginTop: 8,
   },
   input: {
-    backgroundColor: '#2C2C2E',
-    color: '#FFFFFF',
+    backgroundColor: "#2C2C2E",
+    color: "#FFFFFF",
     padding: 8,
     borderRadius: 8,
     marginTop: 8,
@@ -258,18 +289,18 @@ const styles = StyleSheet.create({
   eventItem: {
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#2C2C2E',
+    borderBottomColor: "#2C2C2E",
   },
   eventText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
   },
   eventDetail: {
-    color: '#B0B0B0',
+    color: "#B0B0B0",
     fontSize: 14,
   },
   noEventsText: {
-    color: '#B0B0B0',
+    color: "#B0B0B0",
     fontSize: 16,
     textAlign: "center",
     marginVertical: 16,
@@ -277,16 +308,16 @@ const styles = StyleSheet.create({
   // Estilos para el modal
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(26, 26, 29, 0.8)',
+    justifyContent: "center",
+    backgroundColor: "rgba(26, 26, 29, 0.8)",
   },
   modalView: {
     margin: 20,
-    backgroundColor: '#2C2C2E',
+    backgroundColor: "#2C2C2E",
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -296,24 +327,24 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 16,
   },
   modalInput: {
-    backgroundColor: '#1A1A1D',
-    color: '#FFFFFF',
+    backgroundColor: "#1A1A1D",
+    color: "#FFFFFF",
     padding: 8,
     borderRadius: 8,
-    width: '100%',
+    width: "100%",
     marginBottom: 16,
   },
   modalButton: {
-    backgroundColor: '#FFD700',
+    backgroundColor: "#FFD700",
     padding: 12,
     borderRadius: 8,
     marginTop: 8,
-    width: '100%',
+    width: "100%",
   },
 });

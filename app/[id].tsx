@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { Link, useLocalSearchParams } from "expo-router";
 import {
-  getTournamentBySlug,
   getMatchesByTournament,
   getStandingsByTournament,
   getTopScorersByTournament,
@@ -10,14 +9,15 @@ import {
   Match,
   Team,
   Player,
-} from "../lib/services/mockDataTournify";
+  getTournamentById,
+} from "../lib/services/common";
 import { SoccerBall } from "phosphor-react-native";
 import MatchCard from "../components/MatchCard";
 import StandingsTable from "../components/StandingsTable";
 import TopScorers from "../components/TopScorers";
 
 export default function Detail() {
-  const { gameslug } = useLocalSearchParams();
+  const { id } = useLocalSearchParams();
   const [tournament, setTournament] = useState<Tournament | undefined>(
     undefined,
   );
@@ -27,16 +27,14 @@ export default function Detail() {
 
   useEffect(() => {
     async function fetchData() {
-      const tournamentData = await getTournamentBySlug(gameslug as string);
+      const tournamentData = await getTournamentById(id as string);
       setTournament(tournamentData);
 
       if (tournamentData) {
-        const matchesData = await getMatchesByTournament(gameslug as string);
+        const matchesData = await getMatchesByTournament(id as string);
         setMatches(matchesData);
 
-        const standingsData = await getStandingsByTournament(
-          gameslug as string,
-        );
+        const standingsData = await getStandingsByTournament(id as string);
         setStandings(standingsData);
 
         const topScorersData = await getTopScorersByTournament(
@@ -46,7 +44,7 @@ export default function Detail() {
       }
     }
     fetchData();
-  }, [gameslug]);
+  }, [id]);
 
   if (!tournament) {
     return (

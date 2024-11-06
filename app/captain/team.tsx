@@ -15,17 +15,17 @@ import {
   Team,
   addPlayerToTeam,
   removePlayerFromTeam,
-} from "../../lib/services/mockDataTournify";
-import { getCurrentUser } from "../../lib/services/mockDataTournify";
+} from "../../lib/services/common";
+import useUserStore from "@/stores/useUserStore";
 
 export default function CaptainTeam() {
   const [team, setTeam] = useState<Team | undefined>();
   const [newPlayerName, setNewPlayerName] = useState<string>("");
+  const { user } = useUserStore();
 
   useEffect(() => {
     async function fetchTeam() {
-      const currentUser = await getCurrentUser();
-      const teamData = await getTeamByCaptainId(currentUser.id);
+      const teamData = await getTeamByCaptainId(user?.id as string);
       setTeam(teamData);
     }
     fetchTeam();
@@ -37,7 +37,7 @@ export default function CaptainTeam() {
       return;
     }
 
-    await addPlayerToTeam(team!.id, newPlayerName);
+    await addPlayerToTeam(team?.id as string, user?.id as string);
     Alert.alert(
       "Jugador agregado",
       `${newPlayerName} ha sido agregado al equipo.`,
@@ -73,12 +73,12 @@ export default function CaptainTeam() {
 
       <Text style={styles.subtitle}>Jugadores</Text>
       <FlatList
-        data={team.players}
-        keyExtractor={(item) => item}
+        data={team.Players}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.playerItem}>
-            <Text style={styles.playerName}>{item}</Text>
-            <Pressable onPress={() => handleRemovePlayer(item)}>
+            <Text style={styles.playerName}>{item.User.name}</Text>
+            <Pressable onPress={() => handleRemovePlayer(item.User.name)}>
               <Text style={styles.removeButton}>Eliminar</Text>
             </Pressable>
           </View>

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useRouter } from "expo-router";
-import { getCurrentUser } from "../../lib/services/mockDataTournify";
 import useUserStore from "@/stores/useUserStore";
 
 export default function AdminIndex() {

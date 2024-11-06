@@ -1,4 +1,4 @@
-import { Tournament } from "../lib/services/mockDataTournify";
+import { Tournament } from "../lib/services/common";
 import { Link } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import {

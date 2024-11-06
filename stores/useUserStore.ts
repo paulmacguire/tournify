@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { User } from "@/lib/services/mockDataTournify";
+import { User } from "@/lib/services/common";
 
 interface UserState {
   user: User | null;
