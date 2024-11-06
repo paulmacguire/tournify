@@ -1,11 +1,19 @@
 // app/captain/Home.tsx
 
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { getCurrentUser } from "../../lib/services/mockDataTournify";
 import { useRouter, useNavigation } from "expo-router";
 
 import useUserStore from "@/stores/useUserStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function CaptainHome() {
   const router = useRouter();
   const navigation = useNavigation();
@@ -33,8 +41,22 @@ export default function CaptainHome() {
     router.push("/captain/team");
   };
 
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("userId"); // Cambia "userId" si usas otra clave
+      Alert.alert("Logout", "Se ha eliminado el userId del almacenamiento.");
+      router.replace("/auth");
+      // Puedes agregar aquí redirección a la pantalla de login, si es necesario
+    } catch (error) {
+      Alert.alert("Error", "Hubo un problema al eliminar el userId.");
+    }
+  };
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={handleLogout} style={styles.button}>
+        <Text style={styles.buttonText}>Cerrar Sesión</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Panel del Capitán {user?.name}</Text>
       <Pressable style={styles.button} onPress={handleNavigateToTournaments}>
         <Text style={styles.buttonText}>Ver Torneos Disponibles</Text>
@@ -67,6 +89,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 8,
     marginTop: 16,
+    marginBottom: 16,
     width: "80%",
   },
   buttonText: {

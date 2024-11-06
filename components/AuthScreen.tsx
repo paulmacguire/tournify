@@ -43,20 +43,12 @@ const AuthView: React.FC = () => {
         });
       }
 
-      console.log("ESTA ES LA RESPONSE", response);
-      console.log("ESTE ES EL USERID", response.userId);
       if (response) {
         const fetchedUser = await getUserDataByToken(response.userId);
-        console.log("ESTE ES EL FETCHED USER", fetchedUser);
         setUser(fetchedUser);
         await AsyncStorage.setItem("userId", response.userId.toString());
-        console.log(
-          "Este es el async storage",
-          await AsyncStorage.getItem("userId"),
-        );
 
-        // Reemplaza la pantalla de autenticación por la pantalla principal
-        router.replace("/home"); // Cambia "/home" por la ruta a la que quieres redirigir después de autenticarse
+        router.replace("/home");
       } else {
         throw new Error("No se pudo autenticar");
       }
@@ -106,8 +98,9 @@ const AuthView: React.FC = () => {
               <RNPickerSelect
                 onValueChange={(value) => setRole(value)}
                 items={[
-                  { label: "Organizador", value: "Organizador" },
+                  { label: "Capitan", value: "Capitan" },
                   { label: "Jugador", value: "Jugador" },
+                  { label: "Admin", value: "Admin" },
                 ]}
                 style={{
                   inputIOS: styles.input,
