@@ -1,13 +1,26 @@
 // app/captain/team.tsx
 
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, FlatList, Alert, TextInput } from 'react-native';
-import { getTeamByCaptainId, Team, addPlayerToTeam, removePlayerFromTeam } from '../../lib/services/mockDataTournify';
-import { getCurrentUser } from '../../lib/services/mockDataTournify';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  Alert,
+  TextInput,
+} from "react-native";
+import {
+  getTeamByCaptainId,
+  Team,
+  addPlayerToTeam,
+  removePlayerFromTeam,
+} from "../../lib/services/mockDataTournify";
+import { getCurrentUser } from "../../lib/services/mockDataTournify";
 
 export default function CaptainTeam() {
   const [team, setTeam] = useState<Team | undefined>();
-  const [newPlayerName, setNewPlayerName] = useState<string>('');
+  const [newPlayerName, setNewPlayerName] = useState<string>("");
 
   useEffect(() => {
     async function fetchTeam() {
@@ -20,13 +33,16 @@ export default function CaptainTeam() {
 
   const handleAddPlayer = async () => {
     if (!newPlayerName) {
-      Alert.alert('Error', 'Por favor, ingresa el nombre del jugador.');
+      Alert.alert("Error", "Por favor, ingresa el nombre del jugador.");
       return;
     }
 
     await addPlayerToTeam(team!.id, newPlayerName);
-    Alert.alert('Jugador agregado', `${newPlayerName} ha sido agregado al equipo.`);
-    setNewPlayerName('');
+    Alert.alert(
+      "Jugador agregado",
+      `${newPlayerName} ha sido agregado al equipo.`,
+    );
+    setNewPlayerName("");
     // Actualizar el equipo
     const updatedTeam = await getTeamByCaptainId(team!.captainId);
     setTeam(updatedTeam);
@@ -34,7 +50,10 @@ export default function CaptainTeam() {
 
   const handleRemovePlayer = async (playerName: string) => {
     await removePlayerFromTeam(team!.id, playerName);
-    Alert.alert('Jugador eliminado', `${playerName} ha sido eliminado del equipo.`);
+    Alert.alert(
+      "Jugador eliminado",
+      `${playerName} ha sido eliminado del equipo.`,
+    );
     // Actualizar el equipo
     const updatedTeam = await getTeamByCaptainId(team!.captainId);
     setTeam(updatedTeam);
@@ -86,55 +105,55 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#1A1A1D',
+    backgroundColor: "#1A1A1D",
   },
   title: {
     fontSize: 24,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     marginBottom: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   subtitle: {
     fontSize: 20,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     marginTop: 24,
     marginBottom: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   playerItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#2C2C2E',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "#2C2C2E",
     padding: 12,
     borderRadius: 8,
     marginBottom: 8,
   },
   playerName: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
   },
   removeButton: {
-    color: '#FF0000',
+    color: "#FF0000",
     fontSize: 16,
   },
   input: {
-    backgroundColor: '#2C2C2E',
-    color: '#FFFFFF',
+    backgroundColor: "#2C2C2E",
+    color: "#FFFFFF",
     padding: 8,
     borderRadius: 8,
     marginTop: 8,
   },
   button: {
-    backgroundColor: '#FFD700',
+    backgroundColor: "#FFD700",
     padding: 12,
     borderRadius: 8,
     marginTop: 16,
   },
   buttonText: {
-    color: '#1A1A1D',
+    color: "#1A1A1D",
     fontSize: 16,
-    textAlign: 'center',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontWeight: "bold",
   },
 });
