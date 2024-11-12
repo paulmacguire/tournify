@@ -108,7 +108,20 @@ export async function getTournamentById(
 }
 
 export async function getMatchesByTournament(slug: string): Promise<Match[]> {
-  return matches.filter((match) => match.tournamentSlug === slug);
+  try {
+    const response = await axios.get(
+      `${process.env.EXPO_PUBLIC_API_URL}/matches/tournament/${slug}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    return response.data; 
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
 }
 
 export async function getMatchById(id: string): Promise<Match | undefined> {
@@ -129,13 +142,37 @@ export async function getMatchById(id: string): Promise<Match | undefined> {
 }
 
 export async function getStandingsByTournament(slug: string): Promise<Team[]> {
-  return teams.filter((team) => team.tournamentSlug === slug);
+  try {
+    const response = await axios.get(
+      `${process.env.EXPO_PUBLIC_API_URL}/teams/tournamentSlug/${slug}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    return response.data;  
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
 }
 
-export async function getTopScorersByTournament(
-  slug: string,
-): Promise<Player[]> {
-  return players.filter((player) => player.tournamentSlug === slug);
+export async function getTopScorersByTournament(slug: string): Promise<Player[]> {
+  try {
+    const response = await axios.get(
+      `${process.env.EXPO_PUBLIC_API_URL}/players/tournamentSlug/${slug}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
 }
 
 export async function getTeamById(id: string): Promise<Team | undefined> {
@@ -156,17 +193,24 @@ export async function getTeamById(id: string): Promise<Team | undefined> {
 }
 
 export async function registerTeamToTournament(
-  teamId: string,
-  tournamentSlug: string,
+  teamId: string, // este team tiene que existir previamente en la bdd!
+  tournamentSlug: string
 ): Promise<TeamRegistration> {
-  const newRegistration: TeamRegistration = {
-    id: `reg${teamRegistrations.length + 1}`,
-    teamId,
-    tournamentSlug,
-    status: "Pendiente",
-  };
-  teamRegistrations.push(newRegistration);
-  return newRegistration;
+  try {
+    const response = await axios.post(
+      `${process.env.EXPO_PUBLIC_API_URL}/teamregistrations`,
+      { teamId, tournamentSlug },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
 }
 
 export async function getTeamRegistrationsByTournament(
