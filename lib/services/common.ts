@@ -216,32 +216,59 @@ export async function registerTeamToTournament(
 export async function getTeamRegistrationsByTournament(
   tournamentSlug: string,
 ): Promise<TeamRegistration[]> {
-  return teamRegistrations.filter(
-    (reg) => reg.tournamentSlug === tournamentSlug,
-  );
+  try {
+    const response = await axios.get(
+      `${process.env.EXPO_PUBLIC_API_URL}/teamregistrations/tournamentSlug/${tournamentSlug}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
 }
 
 export async function updateTeamRegistrationStatus(
   registrationId: string,
   status: "Aceptado" | "Rechazado",
 ): Promise<void> {
-  const registration = teamRegistrations.find(
-    (reg) => reg.id === registrationId,
-  );
-  if (registration) {
-    registration.status = status;
+  try {
+    await axios.patch(
+      `${process.env.EXPO_PUBLIC_API_URL}/teamregistrations/${registrationId}/status`,
+      { status },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
   }
 }
 
 export async function getTeamsByTournament(
   tournamentSlug: string,
 ): Promise<Team[]> {
-  const acceptedRegistrations = teamRegistrations.filter(
-    (reg) => reg.tournamentSlug === tournamentSlug && reg.status === "Aceptado",
-  );
-
-  const teamIds = acceptedRegistrations.map((reg) => reg.teamId);
-  return teams.filter((team) => teamIds.includes(team.id));
+  try {
+    const response = await axios.get(
+      `${process.env.EXPO_PUBLIC_API_URL}/teams/tournamentSlug/accepted/${tournamentSlug}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
 }
 
 export async function createMatch(match: Match): Promise<void> {
