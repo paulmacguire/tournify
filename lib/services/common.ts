@@ -112,7 +112,20 @@ export async function getMatchesByTournament(slug: string): Promise<Match[]> {
 }
 
 export async function getMatchById(id: string): Promise<Match | undefined> {
-  return matches.find((match) => match.id === id);
+  try {
+    const response = await axios.get(
+      `${process.env.EXPO_PUBLIC_API_URL}/matches/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      },
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
 }
 
 export async function getStandingsByTournament(slug: string): Promise<Team[]> {
@@ -188,8 +201,22 @@ export async function getTeamsByTournament(
 }
 
 export async function createMatch(match: Match): Promise<void> {
-  matches.push(match);
+  try {
+    await axios.post(
+      `${process.env.EXPO_PUBLIC_API_URL}/matches`,
+      match,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      },
+    );
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
 }
+
 
 export async function updateMatch(match: Match): Promise<void> {
   const index = matches.findIndex((m) => m.id === match.id);
@@ -200,16 +227,26 @@ export async function updateMatch(match: Match): Promise<void> {
 
 export async function addEventToMatch(
   matchId: string,
-  event: MatchEvent,
+  event: MatchEvent
 ): Promise<void> {
-  const match = matches.find((m) => m.id === matchId);
-  if (match) {
-    if (!match.events) {
-      match.events = [];
-    }
-    match.events.push(event);
+  try {
+    const response = await axios.post(
+      `${process.env.EXPO_PUBLIC_API_URL}/matches/${matchId}/add_event`,
+      event,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    console.log("Event added successfully:", response.data);
+  } catch (error: any) {
+    console.error("Failed to add event:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || error.message);
   }
 }
+
 
 export async function getTeamByCaptainId(
   captainId: string,
