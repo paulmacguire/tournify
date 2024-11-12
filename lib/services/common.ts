@@ -289,10 +289,22 @@ export async function createMatch(match: Match): Promise<void> {
 }
 
 
+
 export async function updateMatch(match: Match): Promise<void> {
-  const index = matches.findIndex((m) => m.id === match.id);
-  if (index !== -1) {
-    matches[index] = match;
+  try {
+    const response = await axios.put(
+      `${process.env.EXPO_PUBLIC_API_URL}/matches/${match.id}`,
+      match,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    console.log('Match updated:', response.data);
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
   }
 }
 
