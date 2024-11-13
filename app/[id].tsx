@@ -37,9 +37,7 @@ export default function Detail() {
         const standingsData = await getStandingsByTournament(id as string);
         setStandings(standingsData);
 
-        const topScorersData = await getTopScorersByTournament(
-          gameslug as string,
-        );
+        const topScorersData = await getTopScorersByTournament(id as string);
         setTopScorers(topScorersData);
       }
     }

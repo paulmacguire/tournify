@@ -76,7 +76,7 @@ export default function AdminHome() {
         renderItem={({ item }) => (
           <Pressable
             style={styles.card}
-            onPress={() => handleSelectTournament(item.slug)}
+            onPress={() => handleSelectTournament(item.id)}
           >
             <Image source={item.image} style={styles.image} />
             <View style={styles.textContainer}>

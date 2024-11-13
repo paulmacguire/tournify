@@ -15,7 +15,7 @@ export default function AdminTournamentPanel() {
 
   useEffect(() => {
     async function fetchData() {
-      const torneo = await getTournamentBySlug(slug as string);
+      const torneo = await getTournamentById(slug as string);
       setTournament(torneo);
     }
     fetchData();

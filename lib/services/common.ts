@@ -334,6 +334,7 @@ export async function addEventToMatch(
 export async function getTeamByCaptainId(
   captainId: string,
 ): Promise<Team | undefined> {
+  console.log('captainId:', captainId);
   try {
     const response = await axios.get(
       `${process.env.EXPO_PUBLIC_API_URL}/teams/captain/${captainId}`,

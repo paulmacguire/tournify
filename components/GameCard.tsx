@@ -28,7 +28,7 @@ interface AnimatedGameCardProps {
 
 export const GameCard: React.FC<GameCardProps> = ({ game }) => {
   return (
-    <Link href={`/${game.slug}`} asChild>
+    <Link href={`/${game.id}`} asChild>
       <Pressable style={styles.card}>
         <Image source={game.image} style={styles.image} resizeMode="cover" />
         <View style={styles.infoContainer}>
