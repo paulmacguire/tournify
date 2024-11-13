@@ -55,6 +55,8 @@ export interface MatchEvent {
 
 export interface Match {
   id: string;
+  name1?: string;
+  name2?: string;
   date: string;
   time: string;
   team1: string;

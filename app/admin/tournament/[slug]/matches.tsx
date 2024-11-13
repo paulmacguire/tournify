@@ -13,6 +13,7 @@ import {
   Match,
   getTeamsByTournament,
   Team,
+  getTeamById,
 } from "../../../../lib/services/common";
 
 export default function AdminMatches() {
@@ -23,9 +24,20 @@ export default function AdminMatches() {
   useEffect(() => {
     async function fetchData() {
       const matchesData = await getMatchesByTournament(slug as string);
-      setMatches(matchesData);
+      matchesData.map(async (match) => {
+        const teamData1 = await getTeamById(match.team1);
+        console.log("Esto es el teamData1", teamData1);
+        const teamData2 = await getTeamById(match.team2);
+        console.log("Esto es el teamData2", teamData2);
+        match.name1 = teamData1?.name || "Equipo no encontrado";
+        match.name2 = teamData2?.name || "Equipo no encontrado";
+        matches.push(match);
+      });
+
+      // const teamData1 = await getTeamById(matchesData);
 
       const teamsData = await getTeamsByTournament(slug as string);
+      console.log("Esto es el teamsData", teamsData);
       setTeams(teamsData);
     }
     fetchData();
@@ -47,7 +59,7 @@ export default function AdminMatches() {
           <Link href={`/admin/tournament/${slug}/matches/${item.id}`} asChild>
             <Pressable style={styles.card}>
               <Text style={styles.matchText}>
-                {item.team1} vs {item.team2}
+                {item.name1} vs {item.name2}
               </Text>
               <Text style={styles.matchText}>Fecha: {item.date}</Text>
             </Pressable>

@@ -1,17 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useLocalSearchParams, Link } from "expo-router";
-import { getMatchById, Match, MatchEvent } from "../../lib/services/common";
+import {
+  getMatchById,
+  getTeamById,
+  Match,
+  MatchEvent,
+  Team,
+} from "../../lib/services/common";
 import { SoccerBall } from "phosphor-react-native";
 
 export default function MatchDetails() {
   const { id } = useLocalSearchParams();
   const [match, setMatch] = useState<Match | undefined>(undefined);
+  const [firstTeam, setFirstTeam] = useState<Team>();
+  const [secondTeam, setSecondTeam] = useState<Team>();
 
   useEffect(() => {
     async function fetchMatch() {
       const matchData = await getMatchById(id as string);
       setMatch(matchData);
+
+      // Fetch team data
+      const firstTeamData = await getTeamById(matchData?.team1 as string);
+      setFirstTeam(firstTeamData);
+
+      const secondTeamData = await getTeamById(matchData?.team2 as string);
+      setSecondTeam(secondTeamData);
     }
     fetchMatch();
   }, [id]);
@@ -31,7 +46,7 @@ export default function MatchDetails() {
       <View style={styles.header}>
         <SoccerBall size={40} color="#ffffff" weight="fill" />
         <Text style={styles.title}>
-          {match.team1} vs {match.team2}
+          {firstTeam?.name} vs {secondTeam?.name}
         </Text>
       </View>
       <Text style={styles.detailText}>Fecha: {match.date}</Text>

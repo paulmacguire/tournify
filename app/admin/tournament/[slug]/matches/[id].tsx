@@ -18,6 +18,8 @@ import {
   MatchEvent,
   updateMatch,
   addEventToMatch,
+  getTeamById,
+  Team,
 } from "../../../../../lib/services/common";
 import { Picker } from "@react-native-picker/picker";
 
@@ -34,11 +36,20 @@ export default function AdminMatchDetail() {
   const [detail, setDetail] = useState<string>("");
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [resultInput, setResultInput] = useState<string>("");
+  const [firstTeam, setFirstTeam] = useState<Team>();
+  const [secondTeam, setSecondTeam] = useState<Team>();
 
   useEffect(() => {
     async function fetchMatch() {
       const matchData = await getMatchById(id as string);
       setMatch(matchData);
+
+      // Fetch team data
+      const firstTeamData = await getTeamById(matchData?.team1 as string);
+      setFirstTeam(firstTeamData);
+
+      const secondTeamData = await getTeamById(matchData?.team2 as string);
+      setSecondTeam(secondTeamData);
     }
     fetchMatch();
   }, [id]);
@@ -103,7 +114,7 @@ export default function AdminMatchDetail() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>
-        {match.team1} vs {match.team2}
+        {firstTeam?.name} vs {secondTeam?.name}
       </Text>
       <Text style={styles.detail}>Fecha: {match.date}</Text>
       <Text style={styles.detail}>Hora: {match.time}</Text>

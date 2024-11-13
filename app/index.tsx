@@ -22,6 +22,7 @@ export default function Index() {
     async function fetchUser() {
       if (isMounted && user) {
         // Espera a que el Root Layout esté montado y el user cargado
+        console.log("User", user);
         if (user.role === "Admin") {
           router.replace("/admin");
         } else if (user.role === "Capitan") {

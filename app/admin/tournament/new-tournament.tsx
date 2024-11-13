@@ -63,7 +63,7 @@ const NewTournament: React.FC = () => {
       });
 
       Alert.alert("Torneo Creado", `El torneo "${response.data.name}" ha sido creado.`);
-      router.back();
+      router.replace('/admin/Home');
     } catch (error: any) {
       Alert.alert("Error", error.response?.data?.message || error.message);
     }
