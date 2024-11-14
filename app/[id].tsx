@@ -15,6 +15,7 @@ import { SoccerBall } from "phosphor-react-native";
 import MatchCard from "../components/MatchCard";
 import StandingsTable from "../components/StandingsTable";
 import TopScorers from "../components/TopScorers";
+import { getUserDataByToken } from "@/lib/services/auth";
 
 export default function Detail() {
   const { id } = useLocalSearchParams();
@@ -28,7 +29,14 @@ export default function Detail() {
   useEffect(() => {
     async function fetchData() {
       const tournamentData = await getTournamentById(id as string);
-      setTournament(tournamentData);
+      console.log("Esta es la tournamentData", tournamentData);
+      const organizer = await getUserDataByToken(
+        tournamentData?.organizer as string,
+      );
+      if (tournamentData) {
+        tournamentData.organizer = organizer ? organizer.name : "Desconocido";
+        setTournament(tournamentData);
+      }
 
       if (tournamentData) {
         const matchesData = await getMatchesByTournament(id as string);

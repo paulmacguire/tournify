@@ -29,7 +29,7 @@ export default function AdminMatchDetail() {
   const [match, setMatch] = useState<Match | undefined>();
   const [eventType, setEventType] = useState<
     "Gol" | "Tarjeta Amarilla" | "Tarjeta Roja" | "Sustitución"
-  >("Gol");
+  >();
   const [minute, setMinute] = useState<string>("");
   const [playerName, setPlayerName] = useState<string>("");
   const [teamName, setTeamName] = useState<string>("");
@@ -43,6 +43,7 @@ export default function AdminMatchDetail() {
     async function fetchMatch() {
       const matchData = await getMatchById(id as string);
       setMatch(matchData);
+      console.log("Esta es la matchData", matchData);
 
       // Fetch team data
       const firstTeamData = await getTeamById(matchData?.team1 as string);
@@ -227,7 +228,7 @@ export default function AdminMatchDetail() {
         match.events.map((event, index) => (
           <View key={index} style={styles.eventItem}>
             <Text style={styles.eventText}>
-              {event.minute}' - {event.type} - {event.player} ({event.team})
+              {event.minute}' - Gol - {event.player} ({event.team})
             </Text>
             {event.detail && (
               <Text style={styles.eventDetail}>{event.detail}</Text>

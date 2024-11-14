@@ -20,6 +20,7 @@ export default function MatchDetails() {
     async function fetchMatch() {
       const matchData = await getMatchById(id as string);
       setMatch(matchData);
+      console.log("Esta es la matchData", matchData);
 
       // Fetch team data
       const firstTeamData = await getTeamById(matchData?.team1 as string);

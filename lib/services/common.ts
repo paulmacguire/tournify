@@ -11,7 +11,7 @@ export interface Tournament {
   description: string;
   slug: string;
   image: any;
-  organizer: string;
+  organizer?: string;
 }
 
 export interface Team {
@@ -118,9 +118,9 @@ export async function getMatchesByTournament(slug: string): Promise<Match[]> {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-      }
+      },
     );
-    return response.data; 
+    return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
@@ -152,15 +152,17 @@ export async function getStandingsByTournament(slug: string): Promise<Team[]> {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-      }
+      },
     );
-    return response.data;  
+    return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
 }
 
-export async function getTopScorersByTournament(slug: string): Promise<Player[]> {
+export async function getTopScorersByTournament(
+  slug: string,
+): Promise<Player[]> {
   try {
     const response = await axios.get(
       `${process.env.EXPO_PUBLIC_API_URL}/players/tournamentSlug/${slug}`,
@@ -169,7 +171,7 @@ export async function getTopScorersByTournament(slug: string): Promise<Player[]>
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-      }
+      },
     );
     return response.data;
   } catch (error: any) {
@@ -196,18 +198,18 @@ export async function getTeamById(id: string): Promise<Team | undefined> {
 
 export async function registerTeamToTournament(
   teamId: string, // este team tiene que existir previamente en la bdd!
-  tournamentSlug: string
+  tournamentId: string,
 ): Promise<TeamRegistration> {
   try {
     const response = await axios.post(
-      `${process.env.EXPO_PUBLIC_API_URL}/teamregistrations`,
-      { teamId, tournamentSlug },
+      `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${tournamentId}/add_team`,
+      { team_id: teamId },
       {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-      }
+      },
     );
     return response.data;
   } catch (error: any) {
@@ -226,7 +228,7 @@ export async function getTeamRegistrationsByTournament(
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-      }
+      },
     );
     return response.data;
   } catch (error: any) {
@@ -247,7 +249,7 @@ export async function updateTeamRegistrationStatus(
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-      }
+      },
     );
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
@@ -265,7 +267,7 @@ export async function getTeamsByTournament(
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-      }
+      },
     );
     return response.data;
   } catch (error: any) {
@@ -275,22 +277,16 @@ export async function getTeamsByTournament(
 
 export async function createMatch(match: Match): Promise<void> {
   try {
-    await axios.post(
-      `${process.env.EXPO_PUBLIC_API_URL}/matches`,
-      match,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+    await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/matches`, match, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
-    );
+    });
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
 }
-
-
 
 export async function updateMatch(match: Match): Promise<void> {
   try {
@@ -302,9 +298,9 @@ export async function updateMatch(match: Match): Promise<void> {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-      }
+      },
     );
-    console.log('Match updated:', response.data);
+    console.log("Match updated:", response.data);
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
@@ -312,7 +308,7 @@ export async function updateMatch(match: Match): Promise<void> {
 
 export async function addEventToMatch(
   matchId: string,
-  event: MatchEvent
+  event: MatchEvent,
 ): Promise<void> {
   try {
     const response = await axios.post(
@@ -323,20 +319,22 @@ export async function addEventToMatch(
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-      }
+      },
     );
     console.log("Event added successfully:", response.data);
   } catch (error: any) {
-    console.error("Failed to add event:", error.response?.data || error.message);
+    console.error(
+      "Failed to add event:",
+      error.response?.data || error.message,
+    );
     throw new Error(error.response?.data?.message || error.message);
   }
 }
 
-
 export async function getTeamByCaptainId(
   captainId: string,
 ): Promise<Team | undefined> {
-  console.log('captainId:', captainId);
+  console.log("captainId:", captainId);
   try {
     const response = await axios.get(
       `${process.env.EXPO_PUBLIC_API_URL}/teams/captain/${captainId}`,
