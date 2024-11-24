@@ -28,8 +28,11 @@ export default function CaptainTeam() {
 
   useEffect(() => {
     async function fetchTeam() {
+      console.log("Obteniendo equipo del capitán...");
       const teamData = await getTeamByCaptainId(user?.id as string);
+      console.log("Este es el equipo del capitán aaaaa", teamData);
       setTeam(teamData);
+      console.log("Este es el equipo del capitán", team);   
     }
 
     fetchTeam();
@@ -37,6 +40,7 @@ export default function CaptainTeam() {
 
   useEffect(() => {
     async function fetchUsersByPlayerRole() {
+      console.log("Obteniendo usuarios por rol de jugador...", team);
       if (!team) return; // Espera a que `team` esté disponible
 
       const users = await getUsersByPlayerRole();

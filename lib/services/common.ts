@@ -27,7 +27,7 @@ export interface Team {
   goalsFor: number;
   goalsAgainst: number;
   goalDifference: number;
-  tournamentSlug: string;
+  tournamentId: string;
 }
 
 export interface TeamRegistration {
@@ -43,6 +43,7 @@ export interface Player {
   userId: string;
   teamName: string;
   User: User;
+  goals: number;
 }
 
 export interface MatchEvent {
@@ -112,7 +113,7 @@ export async function getTournamentById(
 export async function getMatchesByTournament(slug: string): Promise<Match[]> {
   try {
     const response = await axios.get(
-      `${process.env.EXPO_PUBLIC_API_URL}/matches/tournament/${slug}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${slug}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +121,8 @@ export async function getMatchesByTournament(slug: string): Promise<Match[]> {
         },
       },
     );
-    return response.data;
+    console.log("Matches:", response.data.Matches);
+    return response.data.Matches;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
@@ -161,11 +163,11 @@ export async function getStandingsByTournament(slug: string): Promise<Team[]> {
 }
 
 export async function getTopScorersByTournament(
-  slug: string,
+  id: string,
 ): Promise<Player[]> {
   try {
     const response = await axios.get(
-      `${process.env.EXPO_PUBLIC_API_URL}/players/tournamentSlug/${slug}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${id}/top-scorers`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -218,11 +220,12 @@ export async function registerTeamToTournament(
 }
 
 export async function getTeamRegistrationsByTournament(
-  tournamentSlug: string,
+  teamId: string,
+  tournamentId: string,
 ): Promise<TeamRegistration[]> {
   try {
     const response = await axios.get(
-      `${process.env.EXPO_PUBLIC_API_URL}/teamregistrations/tournamentSlug/${tournamentSlug}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${tournamentId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -230,6 +233,7 @@ export async function getTeamRegistrationsByTournament(
         },
       },
     );
+    console.log("Registrations:", response.data);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
@@ -345,6 +349,7 @@ export async function getTeamByCaptainId(
         },
       },
     );
+    console.log("Team:", response.data);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);

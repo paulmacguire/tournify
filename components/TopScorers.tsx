@@ -9,16 +9,18 @@ interface TopScorersProps {
 const TopScorers: React.FC<TopScorersProps> = ({ topScorers }) => {
   return (
     <View style={styles.container}>
-      {topScorers.map((player, index) => (
-        <View style={styles.row} key={player.id}>
-          <Text style={styles.position}>{index + 1}</Text>
-          <View style={styles.playerInfo}>
-            <Text style={styles.name}>{player.name}</Text>
-            <Text style={styles.team}>{player.teamName}</Text>
+      {topScorers.map((player, index) => {
+        return (
+          <View style={styles.row} key={player.id}>
+            <Text style={styles.position}>{index + 1}</Text>
+            <View style={styles.playerInfo}>
+              <Text style={styles.name}>{player.user.name}</Text>
+              <Text style={styles.team}>{player.team.name}</Text>
+            </View>
+            <Text style={styles.goals}>{player.goals} goles</Text>
           </View>
-          <Text style={styles.goals}>{player.goals} goles</Text>
-        </View>
-      ))}
+        );
+      })}
     </View>
   );
 };

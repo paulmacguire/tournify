@@ -19,6 +19,7 @@ export default function CaptainTournamentDetail() {
     "No Registrado" | "Pendiente" | "Aceptado" | "Rechazado"
   >("No Registrado");
   const { user, setUser } = useUserStore();
+  const [teamId, setTeamId] = useState<string | undefined>();
 
   const router = useRouter();
 
@@ -29,10 +30,12 @@ export default function CaptainTournamentDetail() {
 
       // Obtener el equipo del capitán
       const team = await getTeamByCaptainId(user?.id as string);
+      console.log("Este es el equipo del capitán", team);
+      setTeamId(team?.id);
 
       // Verificar si el equipo ya está inscrito
       const registrations = await getTeamRegistrationsByTournament(
-        id as string,
+        teamId, id as string
       );
       const teamRegistration = registrations.find(
         (reg) => reg.teamId === team?.id,
@@ -46,10 +49,12 @@ export default function CaptainTournamentDetail() {
   }, [id]);
 
   const handleRegistration = async () => {
+    console.log("Inscribiendo equipo en torneo...", );
     if (!user) return;
+    console.log("Hay usuario...", );
 
     // Suponemos que el equipo del capitán es 'team1'
-    const teamId = "team1";
+    // const teamId = team.id;
 
     await registerTeamToTournament(teamId, id as string);
     setRegistrationStatus("Pendiente");
