@@ -28,6 +28,7 @@
     "firebase": "^10.13.2",
     "jwt-decode": "^4.0.0",
     "nativewind": "^2.0.11",
+    "next": "^15.0.3",
     "phosphor-react-native": "^2.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

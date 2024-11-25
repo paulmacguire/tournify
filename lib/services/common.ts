@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export interface Tournament {
-  id: string;
+  id: number;
   name: string;
   date: string;
   location: string;
@@ -9,9 +9,12 @@ export interface Tournament {
   rol: string;
   classification: string;
   description: string;
-  slug: string;
-  image: any;
-  organizer?: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  Teams: Team[];
+  Matches: Match[];
+  Organizer: string;
 }
 
 export interface Team {
@@ -44,6 +47,7 @@ export interface Player {
   teamName: string;
   User: User;
   goals: number;
+  name: string;
 }
 
 export interface MatchEvent {
@@ -72,6 +76,22 @@ export interface User {
   id: string;
   name: string;
   role: "Jugador" | "Capitan" | "Admin";
+  email: string;
+}
+
+interface TeamResponse {
+  data: Team | undefined;
+  status: number;
+}
+
+interface MatchesResponse {
+  data: Match[];
+  status: number;
+}
+
+interface TournamentResponse {
+  data: Tournament[];
+  status: number;
 }
 
 export async function getTournaments(): Promise<Tournament[]> {
@@ -110,10 +130,10 @@ export async function getTournamentById(
   }
 }
 
-export async function getMatchesByTournament(slug: string): Promise<Match[]> {
+export async function getTournament(id: string): Promise<TournamentResponse> {
   try {
     const response = await axios.get(
-      `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${slug}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${id}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -121,8 +141,24 @@ export async function getMatchesByTournament(slug: string): Promise<Match[]> {
         },
       },
     );
-    console.log("Matches:", response.data.Matches);
-    return response.data.Matches;
+    return { data: response.data, status: response.status };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+}
+
+export async function getMatchesByTournament(id: string): Promise<MatchesResponse> {
+  try {
+    const response = await axios.get(
+      `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      },
+    );
+    return { data: response.data.matches, status: response.status };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
@@ -260,25 +296,6 @@ export async function updateTeamRegistrationStatus(
   }
 }
 
-export async function getTeamsByTournament(
-  tournamentSlug: string,
-): Promise<Team[]> {
-  try {
-    const response = await axios.get(
-      `${process.env.EXPO_PUBLIC_API_URL}/teams/tournamentSlug/accepted/${tournamentSlug}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      },
-    );
-    return response.data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
-}
-
 export async function createMatch(match: Match): Promise<void> {
   try {
     await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/matches`, match, {
@@ -335,9 +352,17 @@ export async function addEventToMatch(
   }
 }
 
+/**
+ * Fetches a team by the captain's ID.
+ *
+ * @param captainId - The ID of the captain.
+ * @returns A promise that resolves to an object containing the team data and the response status, or undefined if not found.
+ * @throws Will throw an error if the request fails.
+ */
+
 export async function getTeamByCaptainId(
   captainId: string,
-): Promise<Team | undefined> {
+): Promise<TeamResponse> {
   console.log("captainId:", captainId);
   try {
     const response = await axios.get(
@@ -350,7 +375,8 @@ export async function getTeamByCaptainId(
       },
     );
     console.log("Team:", response.data);
-    return response.data;
+
+    return { data: response.data, status: response.status };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }

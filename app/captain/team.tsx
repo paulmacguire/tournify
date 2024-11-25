@@ -25,32 +25,40 @@ export default function CaptainTeam() {
   const [users, setUsers] = useState<User[]>([]);
   const [newPlayerName, setNewPlayerName] = useState<string>("");
   const { user } = useUserStore();
+  const [noTeamExist, setNoTeamExist] = useState(false);
 
   useEffect(() => {
     async function fetchTeam() {
-      console.log("Obteniendo equipo del capitán...");
-      const teamData = await getTeamByCaptainId(user?.id as string);
-      console.log("Este es el equipo del capitán aaaaa", teamData);
-      setTeam(teamData);
-      console.log("Este es el equipo del capitán", team);   
+      try {
+        const response = await getTeamByCaptainId(user?.id as string);
+        const { data, status } = response;
+        console.log("Respuesta del servidor:", data, status);
+        if (status === 200) {
+          console.log("Equipo encontrado:", data);
+          setTeam(data); 
+        } else if (status === 201) {
+          console.log("No se encontró equipo o el usuario no es capitán.");
+          setNoTeamExist(true);
+          setTeam(undefined);
+        }
+      } catch (error) {
+        console.error("Error al obtener el equipo del capitán:", error);
+        setTeam(undefined); 
+      }
     }
 
-    fetchTeam();
-  }, [user?.id]); // Este efecto se ejecutará cuando `user?.id` cambie
+    if (user?.id) {
+      fetchTeam();
+    }
+  }, [user?.id]);
 
   useEffect(() => {
     async function fetchUsersByPlayerRole() {
-      console.log("Obteniendo usuarios por rol de jugador...", team);
-      if (!team) return; // Espera a que `team` esté disponible
-
+      if (!team) return; 
       const users = await getUsersByPlayerRole();
-
-      // Obtén los userId de los players en el equipo
       const teamPlayerUserIds = new Set(
         team.Players.map((player) => player.userId),
       );
-
-      // Filtra los usuarios cuyo id no está en `teamPlayerUserIds`
       const filteredUsers = users.filter(
         (user: any) => !teamPlayerUserIds.has(user.id),
       );
@@ -59,14 +67,13 @@ export default function CaptainTeam() {
     }
 
     fetchUsersByPlayerRole();
-  }, [team]); // Este efecto depende de `team`, por lo que se ejecutará después de que `team` esté disponible
+  }, [team]); 
 
   const handleAddPlayer = async (userName: string, userToInviteId: string) => {
     await addPlayerToTeam(team?.id as string, userToInviteId as string);
     Alert.alert("Jugador agregado", `${userName} ha sido agregado al equipo.`);
-    // Actualizar el equipo
-    const updatedTeam = await getTeamByCaptainId(user?.id as string);
-    setTeam(updatedTeam);
+    const updatedResponse = await getTeamByCaptainId(user?.id as string);
+    setTeam(updatedResponse.data); // Actualiza con solo `data`
   };
 
   const handleRemovePlayer = async (
@@ -74,16 +81,12 @@ export default function CaptainTeam() {
     userToRemoveId: string,
   ) => {
     await removePlayerFromTeam(team?.id as string, userToRemoveId as string);
-    Alert.alert(
-      "Jugador eliminado",
-      `${userName} ha sido eliminado del equipo.`,
-    );
-    // Actualizar el equipo
-    const updatedTeam = await getTeamByCaptainId(user?.id as string);
-    setTeam(updatedTeam);
+    Alert.alert("Jugador eliminado", `${userName} ha sido eliminado del equipo.`);
+    const updatedResponse = await getTeamByCaptainId(user?.id as string);
+    setTeam(updatedResponse.data); // Actualiza con solo `data`
   };
 
-  if (!team) {
+  if (!team && !noTeamExist) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Cargando equipo...</Text>
@@ -91,51 +94,57 @@ export default function CaptainTeam() {
     );
   }
 
+  if (noTeamExist) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>No tienes equipo aún</Text>
+        <Text style={styles.title}>😔</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Equipo: {team.name}</Text>
+      {team && (
+        <>
+          <Text style={styles.title}>Equipo: {team.name}</Text>
 
-      <Text style={styles.subtitle}>Jugadores del equipo</Text>
-      <FlatList
-        data={team.Players}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.playerItem}>
-            <Text style={styles.playerName}>{item.User.name}</Text>
-            <Pressable
-              onPress={() => handleRemovePlayer(item.User.name, item.userId)}
-            >
-              <Text style={styles.removeButton}>Eliminar</Text>
-            </Pressable>
-          </View>
-        )}
-      />
+          <Text style={styles.subtitle}>Jugadores del equipo</Text>
+          <FlatList
+            data={team.Players}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.playerItem}>
+                <Text style={styles.playerName}>
+                  {item.name ? item.name : 'Nombre no disponible'}
+                </Text>
 
-      <Text style={styles.subtitle}>Jugadores disponibles para inscribir</Text>
-      <FlatList
-        data={users}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.playerItem}>
-            <Text style={styles.playerName}>{item.name}</Text>
-            <Pressable onPress={() => handleAddPlayer(item.name, item.id)}>
-              <Text style={styles.addButton}>Invitar</Text>
-            </Pressable>
-          </View>
-        )}
-      />
+                {item.id !== team.captainId && (
+                  <Pressable
+                    onPress={() => handleRemovePlayer(item.name, item.id.toString())}
+                  >
+                    <Text style={styles.removeButton}>Eliminar</Text>
+                  </Pressable>
+                )}
+              </View>
+            )}
+          />
 
-      {/* <Text style={styles.subtitle}>Agregar Jugador</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre del jugador"
-        placeholderTextColor="#B0B0B0"
-        value={newPlayerName}
-        onChangeText={setNewPlayerName}
-      />
-      <Pressable style={styles.button} onPress={handleAddPlayer}>
-        <Text style={styles.buttonText}>Agregar Jugador</Text>
-      </Pressable> */}
+          <Text style={styles.subtitle}>Jugadores disponibles para inscribir</Text>
+          <FlatList
+            data={users.filter((user) => user.id !== team.captainId)}  
+            keyExtractor={(item) => item.id.toString()}  
+            renderItem={({ item }) => (
+              <View style={styles.playerItem}>
+                <Text style={styles.playerName}>{item.name}</Text>
+                <Pressable onPress={() => handleAddPlayer(item.name, item.id)}>
+                  <Text style={styles.addButton}>Invitar</Text>
+                </Pressable>
+              </View>
+            )}
+          />
+        </>
+      )}
     </View>
   );
 }
