@@ -67,7 +67,7 @@ export interface Match {
   team1: string;
   team2: string;
   result: string;
-  tournamentSlug: string;
+  tournamentId: string;
   status: "Pendiente" | "Finalizado";
   events?: MatchEvent[];
 }
