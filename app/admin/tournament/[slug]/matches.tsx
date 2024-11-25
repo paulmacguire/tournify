@@ -23,43 +23,30 @@ export default function AdminMatches() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   // const { tournamentId } = useTournament();
-
+  
   useEffect(() => {
-    
     async function fetchData() {
       try {
-        const tournamentData = await getTournament("3");
+        const tournamentData = await getTournament("1");
         const { data, status } = tournamentData;
-        console.log("Tournament data dd:", data);
   
         if (status === 200) {
-          const teams = data[0].Teams; // Equipos del torneo
-          console.log("Teams dd:", teams);
+          const enhancedMatches = data.Matches.map((match: Match) => {
+            // Buscar el equipo correspondiente a team1 y team2
+            const team1 = data.Teams.find((team: Team) => team.id === match.team1);
+            const team2 = data.Teams.find((team: Team) => team.id === match.team2);
   
-          // Mapeamos los partidos y asignamos los nombres de los equipos
-          const enhancedMatches =
-            data[0].Matches && data[0].Matches.length > 0
-              ? data[0].Matches.map((match) => {
-                  const team1 =
-                    teams && teams.length > 0
-                      ? teams.find((team) => team.id === match.team1) || "No encontrado"
-                      : "No equipos disponibles"; // Mensaje si no hay equipos
+            // Retornar el partido con los nombres de los equipos añadidos
+            return {
+              ...match,
+              name1: team1?.name || "Equipo no encontrado",
+              name2: team2?.name || "Equipo no encontrado",
+            };
+          });
   
-                  const team2 =
-                    teams && teams.length > 0
-                      ? teams.find((team) => team.id === match.team2) || "No encontrado"
-                      : "No equipos disponibles"; // Mensaje si no hay equipos
-  
-                  return {
-                    ...match,
-                    name1: team1,
-                    name2: team2,
-                  };
-                })
-              : []; // Si no hay matches, se retorna un array vacío
-  
-          setTeams(teams);
-          // setMatches(enhancedMatches); // Si tienes una variable de estado para los partidos, usa esta línea
+          // Actualizar el estado con los equipos y los partidos
+          setTeams(data.Teams);
+          setMatches(enhancedMatches);
         }
       } catch (error) {
         console.error("Error fetching tournament data:", error);
@@ -67,8 +54,8 @@ export default function AdminMatches() {
     }
   
     fetchData();
-  }, [user?.id]);
-
+  }, [user?.id]); // Agrega dependencias si las necesitas
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Gestionar Partidos</Text>

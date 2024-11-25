@@ -34,14 +34,8 @@ export default function AdminMatchForm() {
 
   useEffect(() => {
     async function fetchTeams() {
-      const teamsData = await getTournament("3");
-      if (teamsData.data.length > 0) {
-        console.log("Teams desde new:", teamsData.data[0]);
-        const firstTournament = teamsData.data[0];
-        setTeams(firstTournament.Teams);
-      } else {    
-        setTeams([]);
-      }
+      const teamsData = await getTournament("1");
+      setTeams(teamsData.data.Teams);
     }
     fetchTeams();
   }, [user?.id]);
@@ -62,14 +56,13 @@ export default function AdminMatchForm() {
     const timeString = time.toTimeString().split(" ")[0].substring(0, 5);
 
     const newMatch: Match = {
-      id: `match${Date.now()}`,
       date: dateString,
       time: timeString,
       team1,
       team2,
       result: "",
-      tournamentSlug: slug as string,
       status: "Pendiente",
+      tournamentId: 1,
     };
 
     await createMatch(newMatch);
@@ -87,17 +80,16 @@ export default function AdminMatchForm() {
         <Picker
           selectedValue={team1}
           onValueChange={(itemValue: string) => setTeam1(itemValue)}
-          style={styles.picker}
           dropdownIconColor="#FFFFFF"
           mode="dropdown"
         >
-          <Picker.Item label="Seleccione un equipo" value="" color="#FFFFFF" />
+          <Picker.Item label="Seleccione un equipo" value="" color="black" />
           {teams.map((team) => (
             <Picker.Item
               key={team.id}
               label={team.name}
               value={team.name}
-              color="#FFFFFF"
+              color="black"
             />
           ))}
         </Picker>
@@ -108,17 +100,16 @@ export default function AdminMatchForm() {
         <Picker
           selectedValue={team2}
           onValueChange={(itemValue: string) => setTeam2(itemValue)}
-          style={styles.picker}
-          dropdownIconColor="#FFFFFF"
+          dropdownIconColor="black"
           mode="dropdown"
         >
-          <Picker.Item label="Seleccione un equipo" value="" color="#FFFFFF" />
+          <Picker.Item label="Seleccione un equipo" value="" color="black" />
           {teams.map((team) => (
             <Picker.Item
               key={team.id}
               label={team.name}
               value={team.name}
-              color="#FFFFFF"
+              color="black"
             />
           ))}
         </Picker>
