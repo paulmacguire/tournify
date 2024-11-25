@@ -17,6 +17,9 @@ import { router } from "expo-router";
 
 export default function Main() {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
+  console.log("Tournaments con error:");
+  console.log(tournaments);
+  
   const insets = useSafeAreaInsets();
   const { user, setUser } = useUserStore();
 

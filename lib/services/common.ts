@@ -44,6 +44,7 @@ export interface Player {
   teamName: string;
   User: User;
   goals: number;
+  name: string;
 }
 
 export interface MatchEvent {
@@ -72,6 +73,12 @@ export interface User {
   id: string;
   name: string;
   role: "Jugador" | "Capitan" | "Admin";
+  email: string;
+}
+
+interface TeamResponse {
+  data: Team | undefined;
+  status: number;
 }
 
 export async function getTournaments(): Promise<Tournament[]> {
@@ -335,9 +342,17 @@ export async function addEventToMatch(
   }
 }
 
+/**
+ * Fetches a team by the captain's ID.
+ *
+ * @param captainId - The ID of the captain.
+ * @returns A promise that resolves to an object containing the team data and the response status, or undefined if not found.
+ * @throws Will throw an error if the request fails.
+ */
+
 export async function getTeamByCaptainId(
   captainId: string,
-): Promise<Team | undefined> {
+): Promise<TeamResponse> {
   console.log("captainId:", captainId);
   try {
     const response = await axios.get(
@@ -350,7 +365,8 @@ export async function getTeamByCaptainId(
       },
     );
     console.log("Team:", response.data);
-    return response.data;
+
+    return { data: response.data, status: response.status };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
