@@ -16,6 +16,8 @@ import {
   Tournament,
 } from "../../lib/services/common";
 import { useRouter } from "expo-router";
+// import { useTournament } from '@/components/TournamentContext';
+
 
 import useUserStore from "@/stores/useUserStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,7 +25,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function AdminHome() {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const router = useRouter();
-
   const { user } = useUserStore();
 
   useEffect(() => {
@@ -39,8 +40,10 @@ export default function AdminHome() {
     fetchData();
   }, []);
 
-  const handleSelectTournament = (slug: string) => {
-    router.push(`/admin/tournament/${slug}`);
+  const handleSelectTournament = (id: string) => {
+    // const { setTournamentId } = useTournament(); // Obtener setTournamentId desde el contexto
+    // setTournamentId(id);
+    router.push(`/admin/tournament/${id}`);
   };
 
   const handleNavigateToNewTournament = () => {
@@ -72,13 +75,12 @@ export default function AdminHome() {
       <Text style={styles.subtitle}>Seleccione un torneo para gestionar:</Text>
       <FlatList
         data={tournaments}
-        keyExtractor={(item) => item.slug}
         renderItem={({ item }) => (
           <Pressable
             style={styles.card}
-            onPress={() => handleSelectTournament(item.id)}
+            onPress={() => handleSelectTournament(String(item.id))}
           >
-            <Image source={item.image} style={styles.image} />
+            <Image style={styles.image} />
             <View style={styles.textContainer}>
               <Text style={styles.tournamentName}>{item.name}</Text>
               <Text style={styles.tournamentDate}>{item.date}</Text>

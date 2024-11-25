@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export interface Tournament {
-  id: string;
+  id: number;
   name: string;
   date: string;
   location: string;
@@ -9,9 +9,12 @@ export interface Tournament {
   rol: string;
   classification: string;
   description: string;
-  slug: string;
-  image: any;
-  organizer?: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  Teams: Team[];
+  Matches: Match[];
+  Organizer: string;
 }
 
 export interface Team {
@@ -81,6 +84,16 @@ interface TeamResponse {
   status: number;
 }
 
+interface MatchesResponse {
+  data: Match[];
+  status: number;
+}
+
+interface TournamentResponse {
+  data: Tournament[];
+  status: number;
+}
+
 export async function getTournaments(): Promise<Tournament[]> {
   try {
     const response = await axios.get(
@@ -117,10 +130,10 @@ export async function getTournamentById(
   }
 }
 
-export async function getMatchesByTournament(slug: string): Promise<Match[]> {
+export async function getTournament(id: string): Promise<TournamentResponse> {
   try {
     const response = await axios.get(
-      `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${slug}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${id}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -128,8 +141,24 @@ export async function getMatchesByTournament(slug: string): Promise<Match[]> {
         },
       },
     );
-    console.log("Matches:", response.data.Matches);
-    return response.data.Matches;
+    return { data: response.data, status: response.status };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+}
+
+export async function getMatchesByTournament(id: string): Promise<MatchesResponse> {
+  try {
+    const response = await axios.get(
+      `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      },
+    );
+    return { data: response.data.matches, status: response.status };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
@@ -262,25 +291,6 @@ export async function updateTeamRegistrationStatus(
         },
       },
     );
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
-}
-
-export async function getTeamsByTournament(
-  tournamentSlug: string,
-): Promise<Team[]> {
-  try {
-    const response = await axios.get(
-      `${process.env.EXPO_PUBLIC_API_URL}/teams/tournamentSlug/accepted/${tournamentSlug}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      },
-    );
-    return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }

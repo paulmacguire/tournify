@@ -12,11 +12,13 @@ import { Picker } from "@react-native-picker/picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
-  getTeamsByTournament,
   Team,
   createMatch,
   Match,
+  getTournament
 } from "../../../../../lib/services/common";
+import useUserStore from "@/stores/useUserStore";
+
 
 export default function AdminMatchForm() {
   const { slug } = useLocalSearchParams();
@@ -28,14 +30,22 @@ export default function AdminMatchForm() {
   const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false);
   const [timePickerVisible, setTimePickerVisible] = useState<boolean>(false);
   const router = useRouter();
+  const { user } = useUserStore();
 
   useEffect(() => {
     async function fetchTeams() {
-      const teamsData = await getTeamsByTournament(slug as string);
-      setTeams(teamsData);
+      const teamsData = await getTournament("3");
+      if (teamsData.data.length > 0) {
+        console.log("Teams desde new:", teamsData.data[0]);
+        const firstTournament = teamsData.data[0];
+        setTeams(firstTournament.Teams);
+      } else {    
+        setTeams([]);
+      }
     }
     fetchTeams();
-  }, [slug]);
+  }, [user?.id]);
+
 
   const handleCreateMatch = async () => {
     if (!team1 || !team2) {

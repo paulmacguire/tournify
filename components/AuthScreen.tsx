@@ -47,11 +47,18 @@ const AuthView: React.FC = () => {
         const fetchedUser = await getUserDataByToken(response.userId);
         setUser(fetchedUser);
         await AsyncStorage.setItem("userId", response.userId.toString());
-
-        router.replace("/home");
+      
+        if (fetchedUser.role === "Admin") {
+          router.replace("/admin/Home");
+        } else if (fetchedUser.role === "Capitan") {
+          router.replace("/captain/Home");
+        } else {
+          router.replace("/home");
+        }
       } else {
         throw new Error("No se pudo autenticar");
       }
+      
     } catch (error) {
       console.error(error);
     }

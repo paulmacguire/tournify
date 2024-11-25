@@ -97,7 +97,7 @@ export default function CaptainTeam() {
   if (noTeamExist) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>No tienes un equipo aún</Text>
+        <Text style={styles.title}>No tienes equipo aún</Text>
         <Text style={styles.title}>😔</Text>
       </View>
     );
