@@ -77,6 +77,7 @@ export default function AdminMatchDetail() {
     setDetail("");
     // Actualizar el partido
     const updatedMatch = await getMatchById(id as string);
+    console.log("Este es el updatedMatch", updatedMatch);
     setMatch(updatedMatch);
   };
 
@@ -188,7 +189,7 @@ export default function AdminMatchDetail() {
         keyboardType="numeric"
       />
 
-      <Text style={styles.label}>Jugador:</Text>
+      <Text style={styles.label}>Nombre jugador:</Text>
       <TextInput
         style={styles.input}
         placeholder="Nombre del jugador"
@@ -197,7 +198,7 @@ export default function AdminMatchDetail() {
         onChangeText={setPlayerName}
       />
 
-      <Text style={styles.label}>Equipo:</Text>
+      <Text style={styles.label}>Nombre del equipo:</Text>
       <TextInput
         style={styles.input}
         placeholder="Nombre del equipo"
@@ -224,11 +225,12 @@ export default function AdminMatchDetail() {
       </Pressable>
 
       <Text style={styles.subtitle}>Eventos del Partido</Text>
-      {match.events && match.events.length > 0 ? (
-        match.events.map((event, index) => (
+
+      {match.Events && match.Events.length > 0 ? (
+        match.Events.map((event, index) => (
           <View key={index} style={styles.eventItem}>
             <Text style={styles.eventText}>
-              {event.minute}' - Gol - {event.player} ({event.team})
+              {event.minute}' - {event.type} - {event.player.name} ({event.team.name})
             </Text>
             {event.detail && (
               <Text style={styles.eventDetail}>{event.detail}</Text>
@@ -238,6 +240,8 @@ export default function AdminMatchDetail() {
       ) : (
         <Text style={styles.noEventsText}>No hay eventos registrados.</Text>
       )}
+
+
     </ScrollView>
   );
 }
