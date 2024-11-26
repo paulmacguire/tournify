@@ -22,13 +22,14 @@ export default function AdminMatches() {
   const { user } = useUserStore();
   const [matches, setMatches] = useState<Match[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
-  // const { tournamentId } = useTournament();
+  const { id } = useLocalSearchParams();
   
   useEffect(() => {
     async function fetchData() {
       try {
-        const tournamentData = await getTournament("1");
+        const tournamentData = await getTournament(id);
         const { data, status } = tournamentData;
+        console.log("Tournament data:", data);
   
         if (status === 200) {
           const enhancedMatches = data.Matches.map((match: Match) => {
@@ -54,12 +55,12 @@ export default function AdminMatches() {
     }
   
     fetchData();
-  }, [user?.id]); // Agrega dependencias si las necesitas
+  }, [id]); // Agrega dependencias si las necesitas
   
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Gestionar Partidos</Text>
-      <Link href={`/admin/tournament/${user?.id}/matches/new`} asChild>
+      <Link href={`/admin/tournament/${id}/matches/new`} asChild>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Crear Nuevo Partido</Text>
         </Pressable>
@@ -69,12 +70,13 @@ export default function AdminMatches() {
         data={matches}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Link href={`/admin/tournament/${user?.id}/matches/${item.id}`} asChild>
+          <Link href={`/admin/tournament/${id}/matches/${item.id}`} asChild>
             <Pressable style={styles.card}>
               <Text style={styles.matchText}>
                 {item.name1} vs {item.name2}
               </Text>
               <Text style={styles.matchText}>Fecha: {item.date}</Text>
+              <Text style={styles.matchText}>Hora: {item.time}</Text>
             </Pressable>
           </Link>
         )}

@@ -51,18 +51,24 @@ const NewTournament: React.FC = () => {
       Description: "Torneo de prueba",
       Slug: tournamentName.toLowerCase().replace(/ /g, "-"), // Genera un slug simple
       image: imageUri ? imageUri.split("/").pop() : "default.jpg", // Extrae el nombre de la imagen si existe
-      organizer: 1, // Puedes cambiar el valor según sea necesario
+      organizer: 3, // Puedes cambiar el valor según sea necesario
     };
 
     try {
-      const response = await axios.post("http://localhost:3000/tournaments", newTournament, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+      const response = await axios.post(
+        `${process.env.EXPO_PUBLIC_API_URL}/tournaments`,
+        newTournament,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
 
-      Alert.alert("Torneo Creado", `El torneo "${response.data.name}" ha sido creado.`);
+      Alert.alert(
+        "Torneo Creado",
+        `El torneo "${response.data.name}" ha sido creado.`,
+      );
       router.replace('/admin/Home');
     } catch (error: any) {
       Alert.alert("Error", error.response?.data?.message || error.message);

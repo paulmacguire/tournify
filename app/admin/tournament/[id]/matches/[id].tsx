@@ -10,6 +10,7 @@ import {
   TextInput,
   ScrollView,
   Modal,
+  Platform,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
@@ -20,6 +21,7 @@ import {
   addEventToMatch,
   getTeamById,
   Team,
+  getTeamByCaptainId,
 } from "../../../../../lib/services/common";
 import { Picker } from "@react-native-picker/picker";
 
@@ -42,15 +44,22 @@ export default function AdminMatchDetail() {
   useEffect(() => {
     async function fetchMatch() {
       const matchData = await getMatchById(id as string);
-      setMatch(matchData);
       console.log("Esta es la matchData", matchData);
+      setMatch(matchData);
 
       // Fetch team data
-      const firstTeamData = await getTeamById(matchData?.team1 as string);
-      setFirstTeam(firstTeamData);
+      console.log("Este es el matchData?.team1", matchData?.Team1);
+      const firstTeamData = await getTeamById(matchData?.Team1 as string);
+      console.log("Este es el firstTeamData", firstTeamData);
+      const firstTeamwithPlayers = await getTeamByCaptainId(firstTeamData?.captainId as string);
+      console.log("Este es el firstTeamwithPlayers", firstTeamwithPlayers);
+      setFirstTeam(firstTeamwithPlayers.data);
 
-      const secondTeamData = await getTeamById(matchData?.team2 as string);
-      setSecondTeam(secondTeamData);
+      const secondTeamData = await getTeamById(matchData?.Team2 as string);
+      console.log("Este es el secondTeamData", secondTeamData);
+      const secondTeamwithPlayers = await getTeamByCaptainId(secondTeamData?.captainId as string);
+      console.log("Este es el secondTeamwithPlayers", secondTeamwithPlayers);
+      setSecondTeam(secondTeamwithPlayers.data);
     }
     fetchMatch();
   }, [id]);
@@ -60,6 +69,7 @@ export default function AdminMatchDetail() {
       Alert.alert("Error", "Por favor, completa todos los campos del evento.");
       return;
     }
+    console.log(minute, eventType, playerName, teamName, detail);
 
     const newEvent: MatchEvent = {
       minute: parseInt(minute),
@@ -112,6 +122,30 @@ export default function AdminMatchDetail() {
       </View>
     );
   }
+
+  // Definir el color basado en la plataforma
+  const backgroundColor = Platform.OS === 'android' ? '#000000' : '#FFFFFF';
+
+  // Crear opciones para el Picker de equipos
+  const teamOptions = [firstTeam, secondTeam].map((team: any) => (
+    <Picker.Item label={team?.name} value={team?.name} key={team?.id} />
+  ));
+
+  console.log("Estos son los teamOptions", teamOptions);
+  console.log("Este es el firstTeam", firstTeam);
+
+  // Crear opciones para el Picker de jugadores
+  const playersTeam1 = firstTeam?.Players.map((player: any) => (
+    <Picker.Item label={`${player.name} - ${firstTeam.name}`} value={player.name} key={player.id} />
+  ));
+
+  const playersTeam2 = secondTeam?.Players.map((player: any) => (
+    <Picker.Item label={`${player.name} - ${secondTeam.name}`} value={player.name} key={player.id} />
+  ));
+
+  const playerOptions = [...playersTeam1, ...playersTeam2];
+
+  console.log("Estos son los playerOptions", playerOptions);
 
   return (
     <ScrollView style={styles.container}>
@@ -173,10 +207,10 @@ export default function AdminMatchDetail() {
         onValueChange={(itemValue) => setEventType(itemValue)}
         style={styles.picker}
       >
-        <Picker.Item label="Gol" value="Gol" color="#FFFFFF" />
-        <Picker.Item label="Tarjeta Amarilla" color="#FFFFFF" />
-        <Picker.Item label="Tarjeta Roja" color="#FFFFFF" />
-        <Picker.Item label="Sustitución" color="#FFFFFF" />
+        <Picker.Item label="Gol" value="Gol" color={backgroundColor} />
+        <Picker.Item label="Tarjeta Amarilla" value="Tarjeta Amarilla" color={backgroundColor} />
+        <Picker.Item label="Tarjeta Roja" value="Tarjeta Roja" color={backgroundColor} />
+        <Picker.Item label="Sustitución" value="Sustitución" color={backgroundColor} />
       </Picker>
 
       <Text style={styles.label}>Minuto:</Text>
@@ -189,23 +223,25 @@ export default function AdminMatchDetail() {
         keyboardType="numeric"
       />
 
-      <Text style={styles.label}>Nombre jugador:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre del jugador"
-        placeholderTextColor="#B0B0B0"
-        value={playerName}
-        onChangeText={setPlayerName}
-      />
-
       <Text style={styles.label}>Nombre del equipo:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre del equipo"
-        placeholderTextColor="#B0B0B0"
-        value={teamName}
-        onChangeText={setTeamName}
-      />
+      <Picker
+        selectedValue={teamName}
+        onValueChange={(itemValue) => setTeamName(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label="Selecciona un equipo" value="" />
+        {teamOptions}
+      </Picker>
+
+      <Text style={styles.label}>Nombre jugador:</Text>
+      <Picker
+        selectedValue={playerName}
+        onValueChange={(itemValue) => setPlayerName(itemValue)}
+        style={styles.picker}
+      >
+        <Picker.Item label="Selecciona un jugador" value="" />
+        {playerOptions}
+      </Picker>
 
       {eventType === "Sustitución" && (
         <>

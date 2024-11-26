@@ -115,6 +115,7 @@ export async function getTournamentById(
   id: string,
 ): Promise<Tournament | undefined> {
   try {
+    console.log("ID:", id);
     const response = await axios.get(
       `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${id}`,
       {
@@ -124,6 +125,7 @@ export async function getTournamentById(
         },
       },
     );
+    console.log("Tournament:", response.data);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);

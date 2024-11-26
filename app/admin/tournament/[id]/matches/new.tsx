@@ -21,7 +21,7 @@ import useUserStore from "@/stores/useUserStore";
 
 
 export default function AdminMatchForm() {
-  const { slug } = useLocalSearchParams();
+  const { id } = useLocalSearchParams();
   const [teams, setTeams] = useState<Team[]>([]);
   const [team1, setTeam1] = useState<string>("");
   const [team2, setTeam2] = useState<string>("");
@@ -34,11 +34,12 @@ export default function AdminMatchForm() {
 
   useEffect(() => {
     async function fetchTeams() {
-      const teamsData = await getTournament("1");
+      // console.log("Tournament ID:", id);
+      const teamsData = await getTournament(id);
       setTeams(teamsData.data.Teams);
     }
     fetchTeams();
-  }, [user?.id]);
+  }, [id]);
 
 
   const handleCreateMatch = async () => {
@@ -62,7 +63,7 @@ export default function AdminMatchForm() {
       team2,
       result: "",
       status: "Pendiente",
-      tournamentId: 1,
+      tournamentId: id,
     };
 
     await createMatch(newMatch);

@@ -43,6 +43,7 @@ export default function AdminHome() {
   const handleSelectTournament = (id: string) => {
     // const { setTournamentId } = useTournament(); // Obtener setTournamentId desde el contexto
     // setTournamentId(id);
+    // console.log("Seleccionando torneo:", id);
     router.push(`/admin/tournament/${id}`);
   };
 
