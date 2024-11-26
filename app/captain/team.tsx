@@ -86,6 +86,10 @@ export default function CaptainTeam() {
     setTeam(updatedResponse.data); // Actualiza con solo `data`
   };
 
+  const playersIds = team?.Players.map(player => player.id) || [];
+  console.log("Jugadores del equipo:", team);
+  console.log("Jugadores disponibles:", users);
+
   if (!team && !noTeamExist) {
     return (
       <View style={styles.container}>
@@ -132,7 +136,7 @@ export default function CaptainTeam() {
 
           <Text style={styles.subtitle}>Jugadores disponibles para inscribir</Text>
           <FlatList
-            data={users.filter((user) => user.id !== team.captainId)}  
+            data={users.filter((user) => user.id !== team.captainId && !playersIds.includes(user.id))}  
             keyExtractor={(item) => item.id.toString()}  
             renderItem={({ item }) => (
               <View style={styles.playerItem}>

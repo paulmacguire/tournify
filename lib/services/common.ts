@@ -261,7 +261,7 @@ export async function getTeamRegistrationsByTournament(
 ): Promise<TeamRegistration[]> {
   try {
     const response = await axios.get(
-      `${process.env.EXPO_PUBLIC_API_URL}/tournaments/${tournamentId}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/teams/${teamId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -270,7 +270,12 @@ export async function getTeamRegistrationsByTournament(
       },
     );
     console.log("Registrations:", response.data);
-    return response.data;
+    console.log("Tournament ID:", tournamentId);
+    const tournament_id = response.data.tournamentId
+    if (tournament_id == tournamentId) {
+      return "Aceptado";
+    }
+    return "No Registrado";
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }
