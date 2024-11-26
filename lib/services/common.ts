@@ -64,8 +64,8 @@ export interface Match {
   name2?: string;
   date: string;
   time: string;
-  team1: string;
-  team2: string;
+  Team1: string;
+  Team2: string;
   result: string;
   tournamentId: string;
   status: "Pendiente" | "Finalizado";

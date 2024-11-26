@@ -21,7 +21,6 @@ import {
   addEventToMatch,
   getTeamById,
   Team,
-  getTeamByCaptainId,
 } from "../../../../../lib/services/common";
 import { Picker } from "@react-native-picker/picker";
 
@@ -38,8 +37,8 @@ export default function AdminMatchDetail() {
   const [detail, setDetail] = useState<string>("");
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [resultInput, setResultInput] = useState<string>("");
-  const [firstTeam, setFirstTeam] = useState<Team>();
-  const [secondTeam, setSecondTeam] = useState<Team>();
+  const [firstTeam, setFirstTeam] = useState<Team | undefined>();
+  const [secondTeam, setSecondTeam] = useState<Team | undefined>();
 
   useEffect(() => {
     async function fetchMatch() {
@@ -47,19 +46,23 @@ export default function AdminMatchDetail() {
       console.log("Esta es la matchData", matchData);
       setMatch(matchData);
 
-      // Fetch team data
-      console.log("Este es el matchData?.team1", matchData?.Team1);
-      const firstTeamData = await getTeamById(matchData?.Team1 as string);
-      console.log("Este es el firstTeamData", firstTeamData);
-      const firstTeamwithPlayers = await getTeamByCaptainId(firstTeamData?.captainId as string);
-      console.log("Este es el firstTeamwithPlayers", firstTeamwithPlayers);
-      setFirstTeam(firstTeamwithPlayers.data);
+      // Verificar si Team1 y Team2 ya están en matchData
+      if (matchData.Team1 && matchData.Team2) {
+        setFirstTeam(matchData.Team1);
+        setSecondTeam(matchData.Team2);
+      } else {
+        // Si no están, obtener los equipos por ID
+        const firstTeamId = matchData.team1.toString();
+        const secondTeamId = matchData.team2.toString();
 
-      const secondTeamData = await getTeamById(matchData?.Team2 as string);
-      console.log("Este es el secondTeamData", secondTeamData);
-      const secondTeamwithPlayers = await getTeamByCaptainId(secondTeamData?.captainId as string);
-      console.log("Este es el secondTeamwithPlayers", secondTeamwithPlayers);
-      setSecondTeam(secondTeamwithPlayers.data);
+        const firstTeamData = await getTeamById(firstTeamId);
+        console.log("Este es el firstTeamData", firstTeamData);
+        setFirstTeam(firstTeamData);
+
+        const secondTeamData = await getTeamById(secondTeamId);
+        console.log("Este es el secondTeamData", secondTeamData);
+        setSecondTeam(secondTeamData);
+      }
     }
     fetchMatch();
   }, [id]);
@@ -115,7 +118,7 @@ export default function AdminMatchDetail() {
     }
   };
 
-  if (!match) {
+  if (!match || !firstTeam || !secondTeam) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Cargando partido...</Text>
@@ -124,7 +127,7 @@ export default function AdminMatchDetail() {
   }
 
   // Definir el color basado en la plataforma
-  const backgroundColor = Platform.OS === 'android' ? '#000000' : '#FFFFFF';
+  const backgroundColor = Platform.OS === "android" ? "#000000" : "#FFFFFF";
 
   // Crear opciones para el Picker de equipos
   const teamOptions = [firstTeam, secondTeam].map((team: any) => (
@@ -135,13 +138,21 @@ export default function AdminMatchDetail() {
   console.log("Este es el firstTeam", firstTeam);
 
   // Crear opciones para el Picker de jugadores
-  const playersTeam1 = firstTeam?.Players.map((player: any) => (
-    <Picker.Item label={`${player.name} - ${firstTeam.name}`} value={player.name} key={player.id} />
-  ));
+  const playersTeam1 = firstTeam?.Players?.map((player: any) => (
+    <Picker.Item
+      label={`${player.name} - ${firstTeam.name}`}
+      value={player.name}
+      key={player.id}
+    />
+  )) ?? [];
 
-  const playersTeam2 = secondTeam?.Players.map((player: any) => (
-    <Picker.Item label={`${player.name} - ${secondTeam.name}`} value={player.name} key={player.id} />
-  ));
+  const playersTeam2 = secondTeam?.Players?.map((player: any) => (
+    <Picker.Item
+      label={`${player.name} - ${secondTeam.name}`}
+      value={player.name}
+      key={player.id}
+    />
+  )) ?? [];
 
   const playerOptions = [...playersTeam1, ...playersTeam2];
 
@@ -208,9 +219,21 @@ export default function AdminMatchDetail() {
         style={styles.picker}
       >
         <Picker.Item label="Gol" value="Gol" color={backgroundColor} />
-        <Picker.Item label="Tarjeta Amarilla" value="Tarjeta Amarilla" color={backgroundColor} />
-        <Picker.Item label="Tarjeta Roja" value="Tarjeta Roja" color={backgroundColor} />
-        <Picker.Item label="Sustitución" value="Sustitución" color={backgroundColor} />
+        <Picker.Item
+          label="Tarjeta Amarilla"
+          value="Tarjeta Amarilla"
+          color={backgroundColor}
+        />
+        <Picker.Item
+          label="Tarjeta Roja"
+          value="Tarjeta Roja"
+          color={backgroundColor}
+        />
+        <Picker.Item
+          label="Sustitución"
+          value="Sustitución"
+          color={backgroundColor}
+        />
       </Picker>
 
       <Text style={styles.label}>Minuto:</Text>
@@ -266,7 +289,8 @@ export default function AdminMatchDetail() {
         match.Events.map((event, index) => (
           <View key={index} style={styles.eventItem}>
             <Text style={styles.eventText}>
-              {event.minute}' - {event.type} - {event.player.name} ({event.team.name})
+              {event.minute}' - {event.type} - {event.player.name} (
+              {event.team.name})
             </Text>
             {event.detail && (
               <Text style={styles.eventDetail}>{event.detail}</Text>
@@ -276,13 +300,11 @@ export default function AdminMatchDetail() {
       ) : (
         <Text style={styles.noEventsText}>No hay eventos registrados.</Text>
       )}
-
-
     </ScrollView>
   );
 }
 
-// Asegúrate de que las funciones updateMatch y addEventToMatch están correctamente implementadas en mockDataTournify.ts
+// Asegúrate de que las funciones updateMatch y addEventToMatch están correctamente implementadas en common.ts
 
 const styles = StyleSheet.create({
   container: {
