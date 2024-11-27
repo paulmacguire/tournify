@@ -27,7 +27,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {match.team1}
+              {match.team1Name}
             </Text>
           </View>
           <Text style={styles.score}>{isPending ? "VS" : match.result}</Text>
@@ -38,7 +38,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {match.team2}
+              {match.team2Name}
             </Text>
           </View>
         </View>

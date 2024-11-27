@@ -160,7 +160,7 @@ export async function getMatchesByTournament(id: string): Promise<MatchesRespons
         },
       },
     );
-    return { data: response.data.matches, status: response.status };
+    return { data: response.data.Matches, status: response.status };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || error.message);
   }

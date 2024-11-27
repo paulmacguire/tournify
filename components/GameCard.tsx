@@ -1,3 +1,5 @@
+// components/GameCard.tsx
+
 import { Tournament } from "../lib/services/common";
 import { Link } from "expo-router";
 import React, { useEffect, useRef } from "react";
@@ -9,13 +11,6 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-
-const imageMap = {
-  "torneo-verano-2024": require("../assets/liga_cai.png"),
-  "torneo-invierno-2024": require("../assets/ultrapadel.jpg"),
-  "torneo-primavera-2024": require("../assets/liga_premier.png"),
-  "torneo-otono-2024": require("../assets/lif.png"),
-};
 
 interface GameCardProps {
   game: Tournament;
@@ -30,7 +25,16 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
   return (
     <Link href={`/${game.id}`} asChild>
       <Pressable style={styles.card}>
-        <Image source={game.image} style={styles.image} resizeMode="cover" />
+        {game.image ? (
+          <Image
+            source={{ uri: game.image }} // Usar { uri: game.image } para imágenes remotas
+            style={styles.image}
+            resizeMode="cover"
+            onError={(error) => {
+              console.error("Error cargando la imagen:", error.nativeEvent.error);
+            }}
+          />
+        ) : null}
         <View style={styles.infoContainer}>
           <Text style={styles.title}>{game.name}</Text>
           <Text style={styles.description}>{game.description}</Text>
@@ -86,3 +90,5 @@ const styles = StyleSheet.create({
     color: "#B0B0B0",
   },
 });
+
+export default AnimatedGameCard;
