@@ -11,32 +11,61 @@ import {
 } from "react-native";
 import { getTournaments, Tournament } from "../../lib/services/common";
 import { Link } from "expo-router";
-// const image = require("../../assets/logo-torneo.jpg");
 
 export default function CaptainTournaments() {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchTournaments() {
-      const data = await getTournaments();
-      setTournaments(data);
-    }
+    const fetchTournaments = async () => {
+      try {
+        const data = await getTournaments();
+        setTournaments(data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchTournaments();
   }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.loadingText}>Cargando torneos...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Error: {error}</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Torneos Disponibles</Text>
       <FlatList
         data={tournaments}
-        keyExtractor={(item) => item.slug}
+        keyExtractor={(item) => item.id.toString()} // Usar item.id para claves únicas
         renderItem={({ item }) => (
           <Link href={`/captain/tournament/${item.id}`} asChild>
             <Pressable style={styles.card}>
-              <Image
-                source={require("../../assets/ultrapadel.jpg")}
-                style={styles.image}
-              />
+              {item.image ? (
+                <Image
+                  source={{ uri: item.image }} // Usar { uri: item.image } para imágenes remotas
+                  style={styles.image}
+                  resizeMode="cover"
+                  onError={(error) => {
+                    console.error("Error cargando la imagen:", error.nativeEvent.error);
+                  }}
+                />
+              ) : null}
               <View style={styles.textContainer}>
                 <Text style={styles.tournamentName}>{item.name}</Text>
                 <Text style={styles.tournamentDate}>{item.date}</Text>
@@ -44,6 +73,7 @@ export default function CaptainTournaments() {
             </Pressable>
           </Link>
         )}
+        contentContainerStyle={styles.listContent}
       />
     </View>
   );
@@ -54,6 +84,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: "#1A1A1D",
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: 28,
@@ -62,16 +94,26 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  loadingText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    textAlign: "center",
+  },
+  errorText: {
+    color: "#FF0000",
+    fontSize: 18,
+    textAlign: "center",
+  },
   card: {
     backgroundColor: "#2C2C2E",
     borderRadius: 12,
     marginBottom: 12,
     overflow: "hidden",
+    width: "100%",
   },
   image: {
     width: "100%",
     height: 180,
-    resizeMode: "cover",
   },
   textContainer: {
     padding: 12,
@@ -85,5 +127,8 @@ const styles = StyleSheet.create({
   tournamentDate: {
     color: "#FFFFFF",
     fontSize: 16,
+  },
+  listContent: {
+    paddingTop: 16,
   },
 });

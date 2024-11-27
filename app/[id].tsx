@@ -15,6 +15,8 @@ import { SoccerBall } from "phosphor-react-native";
 import MatchCard from "../components/MatchCard";
 import StandingsTable from "../components/StandingsTable";
 import TopScorers from "../components/TopScorers";
+import { getUserDataByToken } from "@/lib/services/auth";
+import { finished } from "stream";
 
 export default function Detail() {
   const { id } = useLocalSearchParams();
@@ -28,18 +30,37 @@ export default function Detail() {
   useEffect(() => {
     async function fetchData() {
       const tournamentData = await getTournamentById(id as string);
-      setTournament(tournamentData);
-
+      console.log("Esta es la tournamentData", tournamentData);
+      const organizer = await getUserDataByToken(
+        tournamentData?.Organizer as string,
+      );
       if (tournamentData) {
-        const matchesData = await getMatchesByTournament(id as string);
-        setMatches(matchesData);
+        tournamentData.Organizer = organizer ? organizer.name : "Desconocido";
+        setTournament(tournamentData);
 
+        // Crear un mapeo de teamId a teamName
+        const teamIdToName: { [key: number]: string } = {};
+        tournamentData.Teams.forEach((team) => {
+          teamIdToName[team.id] = team.name;
+        });
+
+        // Obtener y enriquecer los partidos
+        const matchesData = await getMatchesByTournament(id as string);
+        const enrichedMatches = matchesData.data.map((match) => {
+          return {
+            ...match,
+            team1Name: teamIdToName[match.team1] || 'Equipo desconocido',
+            team2Name: teamIdToName[match.team2] || 'Equipo desconocido',
+          };
+        });
+        setMatches(enrichedMatches);
+        console.log("Estos son los matches", enrichedMatches);
+
+        // Obtener standings y goleadores
         const standingsData = await getStandingsByTournament(id as string);
         setStandings(standingsData);
 
-        const topScorersData = await getTopScorersByTournament(
-          gameslug as string,
-        );
+        const topScorersData = await getTopScorersByTournament(id as string);
         setTopScorers(topScorersData);
       }
     }
@@ -88,7 +109,7 @@ export default function Detail() {
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.label}>Organizador:</Text>
-            <Text style={styles.detailText}>{tournament.organizer}</Text>
+            <Text style={styles.detailText}>{tournament.Organizer}</Text>
           </View>
         </View>
 
@@ -121,7 +142,9 @@ export default function Detail() {
             ))}
           </View>
         ) : (
-          <Text style={styles.noMatchesText}>No hay partidos finalizados.</Text>
+          <Text style={styles.noMatchesText}>
+            No hay partidos finalizados.
+          </Text>
         )}
         <Link style={styles.backLink} href={"/"}>
           Volver atrás
@@ -203,7 +226,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1A1A1D",
   },
   loadingText: {
-    color: "#ffffff", // Texto blanco
+    color: "#ffffff",
     fontSize: 18,
   },
 });

@@ -9,17 +9,17 @@ import {
 import useUserStore from "@/stores/useUserStore";
 
 export default function AdminTournamentPanel() {
-  const { slug } = useLocalSearchParams();
+  const { id } = useLocalSearchParams();
   const [tournament, setTournament] = useState<Tournament | undefined>();
   const { user, setUser } = useUserStore();
 
   useEffect(() => {
     async function fetchData() {
-      const torneo = await getTournamentBySlug(slug as string);
+      const torneo = await getTournamentById(id as string);
       setTournament(torneo);
     }
     fetchData();
-  }, [slug]);
+  }, [id]);
 
   if (!tournament) {
     return (
@@ -34,13 +34,13 @@ export default function AdminTournamentPanel() {
       <Text style={styles.title}>Torneos de {user?.name}</Text>
       <Text style={styles.tournamentName}>{tournament.name}</Text>
 
-      <Link href={`/admin/tournament/${slug}/registrations`} asChild>
+      {/* <Link href={`/admin/tournament/${id}/registrations`} asChild>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Gestionar Inscripciones</Text>
         </Pressable>
-      </Link>
+      </Link> */}
 
-      <Link href={`/admin/tournament/${slug}/matches`} asChild>
+      <Link href={`/admin/tournament/${id}/matches`} asChild>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Gestionar Partidos</Text>
         </Pressable>

@@ -19,6 +19,8 @@ export default function CaptainTournamentDetail() {
     "No Registrado" | "Pendiente" | "Aceptado" | "Rechazado"
   >("No Registrado");
   const { user, setUser } = useUserStore();
+  const [teamData, setTeamData] = useState<any>(null);
+  const [teamId, setTeamId] = useState<string | undefined>();
 
   const router = useRouter();
 
@@ -29,27 +31,34 @@ export default function CaptainTournamentDetail() {
 
       // Obtener el equipo del capitán
       const team = await getTeamByCaptainId(user?.id as string);
+      console.log("ID del equipo del capitán:", team?.data.id);
+      setTeamId(team?.data.id);
+      setTeamData(team.data);
+      console.log("Torneo:", tournament);
+      console.log("Equipo del capitán:", teamData);
+      console.log("ID del equipo del capitán:", teamId);
+      
 
       // Verificar si el equipo ya está inscrito
       const registrations = await getTeamRegistrationsByTournament(
-        id as string,
+        team?.data.id, id as string
       );
-      const teamRegistration = registrations.find(
-        (reg) => reg.teamId === team?.id,
-      );
+      console.log("Registrations:", registrations);
 
-      if (teamRegistration) {
-        setRegistrationStatus(teamRegistration.status);
-      }
+      setRegistrationStatus(registrations);
+      
     }
     fetchData();
   }, [id]);
 
   const handleRegistration = async () => {
+    console.log("Inscribiendo equipo en torneo...", );
     if (!user) return;
+    console.log("Hay usuario...", );
 
     // Suponemos que el equipo del capitán es 'team1'
-    const teamId = "team1";
+    // const teamId = team.id;
+    console.log("Este es el id del equipo", teamId);
 
     await registerTeamToTournament(teamId, id as string);
     setRegistrationStatus("Pendiente");

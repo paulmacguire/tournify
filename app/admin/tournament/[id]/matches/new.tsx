@@ -12,14 +12,16 @@ import { Picker } from "@react-native-picker/picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
-  getTeamsByTournament,
   Team,
   createMatch,
   Match,
+  getTournament
 } from "../../../../../lib/services/common";
+import useUserStore from "@/stores/useUserStore";
+
 
 export default function AdminMatchForm() {
-  const { slug } = useLocalSearchParams();
+  const { id } = useLocalSearchParams();
   const [teams, setTeams] = useState<Team[]>([]);
   const [team1, setTeam1] = useState<string>("");
   const [team2, setTeam2] = useState<string>("");
@@ -28,14 +30,17 @@ export default function AdminMatchForm() {
   const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false);
   const [timePickerVisible, setTimePickerVisible] = useState<boolean>(false);
   const router = useRouter();
+  const { user } = useUserStore();
 
   useEffect(() => {
     async function fetchTeams() {
-      const teamsData = await getTeamsByTournament(slug as string);
-      setTeams(teamsData);
+      // console.log("Tournament ID:", id);
+      const teamsData = await getTournament(id);
+      setTeams(teamsData.data.Teams);
     }
     fetchTeams();
-  }, [slug]);
+  }, [id]);
+
 
   const handleCreateMatch = async () => {
     if (!team1 || !team2) {
@@ -52,14 +57,13 @@ export default function AdminMatchForm() {
     const timeString = time.toTimeString().split(" ")[0].substring(0, 5);
 
     const newMatch: Match = {
-      id: `match${Date.now()}`,
       date: dateString,
       time: timeString,
       team1,
       team2,
       result: "",
-      tournamentSlug: slug as string,
       status: "Pendiente",
+      tournamentId: id,
     };
 
     await createMatch(newMatch);
@@ -77,17 +81,16 @@ export default function AdminMatchForm() {
         <Picker
           selectedValue={team1}
           onValueChange={(itemValue: string) => setTeam1(itemValue)}
-          style={styles.picker}
           dropdownIconColor="#FFFFFF"
           mode="dropdown"
         >
-          <Picker.Item label="Seleccione un equipo" value="" color="#FFFFFF" />
+          <Picker.Item label="Seleccione un equipo" value="" color="black" />
           {teams.map((team) => (
             <Picker.Item
               key={team.id}
               label={team.name}
               value={team.name}
-              color="#FFFFFF"
+              color="black"
             />
           ))}
         </Picker>
@@ -98,17 +101,16 @@ export default function AdminMatchForm() {
         <Picker
           selectedValue={team2}
           onValueChange={(itemValue: string) => setTeam2(itemValue)}
-          style={styles.picker}
-          dropdownIconColor="#FFFFFF"
+          dropdownIconColor="black"
           mode="dropdown"
         >
-          <Picker.Item label="Seleccione un equipo" value="" color="#FFFFFF" />
+          <Picker.Item label="Seleccione un equipo" value="" color="black" />
           {teams.map((team) => (
             <Picker.Item
               key={team.id}
               label={team.name}
               value={team.name}
-              color="#FFFFFF"
+              color="black"
             />
           ))}
         </Picker>

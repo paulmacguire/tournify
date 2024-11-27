@@ -3,6 +3,9 @@ import { View, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import Main from "../components/Main";
 import useUserStore from "@/stores/useUserStore";
+import dotenv from 'dotenv';
+
+// dotenv.config();
 
 export default function Index() {
   const router = useRouter();
@@ -19,6 +22,7 @@ export default function Index() {
     async function fetchUser() {
       if (isMounted && user) {
         // Espera a que el Root Layout esté montado y el user cargado
+        console.log("User", user);
         if (user.role === "Admin") {
           router.replace("/admin");
         } else if (user.role === "Capitan") {

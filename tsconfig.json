@@ -3,10 +3,20 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
     "jsx": "react-native",
-    "types": ["nativewind/types", "node"]
+    "types": [
+      "nativewind/types",
+      "node"
+    ]
   },
-  "include": ["**/*.ts", "**/*.tsx", "app/_layout.js"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "app/_layout.js",
+    "components/TournamentContext.tsx"
+  ]
 }

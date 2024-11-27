@@ -32,6 +32,8 @@ export async function login(loginData: LoginData): Promise<any> {
 
 export async function register(registerData: RegisterData): Promise<any> {
   try {
+    console.log(registerData);
+    console.log(process.env.EXPO_PUBLIC_API_URL);
     const response = await axios.post(
       `${process.env.EXPO_PUBLIC_API_URL}/auth/signup`,
       registerData,
@@ -42,8 +44,10 @@ export async function register(registerData: RegisterData): Promise<any> {
         },
       },
     );
+    console.log(response.data);
     return response.data;
   } catch (error: any) {
+    console.error("Error al registrar el usuario", error);
     throw new Error(error.response?.data?.message || error.message);
   }
 }
